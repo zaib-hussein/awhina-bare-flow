@@ -1,8 +1,9 @@
 import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image, ScrollView} from 'react-native';
 
 export default function Emergency() {
 	return (
+		<ScrollView>
 		<View style={styles.container}>
 			<TouchableOpacity
 				style={styles.button}
@@ -54,6 +55,7 @@ export default function Emergency() {
 			</TouchableOpacity>
 			<Text>CLOTHES</Text>
 		</View>
+		</ScrollView>
 	);
 }
 
