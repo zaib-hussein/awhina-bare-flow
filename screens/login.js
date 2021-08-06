@@ -67,6 +67,9 @@ export default function Login({navigation}) {
 		navigation.navigate('Home');
 	};
 
+	// state={isLoading: false};
+	// <ActivityIndicator size="large" color="black" animating={this.state.isLoading} />
+
 	return (
 		<View style={styles.login}>
 			<View>
