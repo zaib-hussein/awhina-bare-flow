@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, Button, TextInput} from 'react-native';
 import firebase from 'firebase';
+import * as Animatable from 'react-native-animatable';
 import '@react-native-firebase/app';
 import '@react-native-firebase/auth';
 
@@ -20,6 +21,7 @@ export default function Login({navigation}) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [press, setPress] = useState(false);
+	const [loginErrorMessage, setLoginErrorMessage] = useState('');
 
 	// function createNewUser() {
 	// 	firebase
@@ -51,7 +53,7 @@ export default function Login({navigation}) {
 					//Not Logged In
 					var errorCode = error.code;
 					var errorMessage = error.message;
-					console.log(error);
+					setLoginErrorMessage(errorMessage);
 				});
 		}
 	}
@@ -81,6 +83,11 @@ export default function Login({navigation}) {
 					style={styles.textbox}
 					onChangeText={(text) => setPassword(text)}
 				/>
+				{loginErrorMessage !== '' ? null : (
+					<Animatable.View animation="fadeInLeft" duration={500}>
+						<Text style={styles.errorText}>{loginErrorMessage}</Text>
+					</Animatable.View>
+				)}
 				<Button
 					style={styles.loginButton}
 					title="Login"
@@ -106,6 +113,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
+	},
+	errorText: {
+		color: 'red',
 	},
 	textbox: {
 		borderColor: 'blue',

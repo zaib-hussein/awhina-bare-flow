@@ -1,0 +1,47 @@
+{
+	"project_info": {
+		"project_number": "592015836706",
+		"firebase_url": "https://awhina-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+		"project_id": "awhina-app",
+		"storage_bucket": "awhina-app.appspot.com"
+	},
+	"client": [
+		{
+			"client_info": {
+				"mobilesdk_app_id": "1:592015836706:android:fe481c23be39cb51bc6c7b",
+				"android_client_info": {
+					"package_name": "com.awhina.android"
+				}
+			},
+			"oauth_client": [
+				{
+					"client_id": "592015836706-e6ro6rfkdi4nmbi30jgm506k7g1ldi2c.apps.googleusercontent.com",
+					"client_type": 3
+				}
+			],
+			"api_key": [
+				{
+					"current_key": "AIzaSyBCjtYa3OWRYBR_33lRWe1SnfWzf9YPzhc"
+				}
+			],
+			"services": {
+				"appinvite_service": {
+					"other_platform_oauth_client": [
+						{
+							"client_id": "592015836706-e6ro6rfkdi4nmbi30jgm506k7g1ldi2c.apps.googleusercontent.com",
+							"client_type": 3
+						},
+						{
+							"client_id": "592015836706-259pa48ukr4q37qup53pb0ecddog7ssf.apps.googleusercontent.com",
+							"client_type": 2,
+							"ios_info": {
+								"bundle_id": "com.awhina-app.ios"
+							}
+						}
+					]
+				}
+			}
+		}
+	],
+	"configuration_version": "1"
+}
