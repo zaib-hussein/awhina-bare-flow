@@ -5,6 +5,8 @@ import * as Animatable from 'react-native-animatable';
 import '@react-native-firebase/app';
 import '@react-native-firebase/auth';
 
+import Spinner from 'react-native-loading-spinner-overlay';
+
 const firebaseConfig = {
 	apiKey: 'AIzaSyAwb_T1CUeLpkSMuZA_-WU1BQ1EaHQzcm8',
 	authDomain: 'awhina-app.firebaseapp.com',
@@ -22,6 +24,16 @@ export default function Login({navigation}) {
 	const [password, setPassword] = useState('');
 	const [press, setPress] = useState(false);
 	const [loginErrorMessage, setLoginErrorMessage] = useState('');
+
+	//activity spinner///////////////////////////////////
+	const [loading, setLoading] = useState(false);
+	const startLoading = () => {
+		setLoading(true);
+		setTimeout(() => {
+		  setLoading(false);
+		}, 1800);
+	  };
+	////////////////////////////////////////////////////
 
 	// function createNewUser() {
 	// 	firebase
@@ -48,6 +60,7 @@ export default function Login({navigation}) {
 					//Logged in
 					var user = userCredential.user;
 					goToHomeScreen();
+					// setLoading(false); //set spinner to flase to stop loading
 				})
 				.catch((error) => {
 					//Not Logged In
@@ -66,13 +79,23 @@ export default function Login({navigation}) {
 	const goToHomeScreen = () => {
 		navigation.navigate('Home');
 	};
-
-	// state={isLoading: false};
-	// <ActivityIndicator size="large" color="black" animating={this.state.isLoading} />
-
+	  
 	return (
 		<View style={styles.login}>
+
 			<View>
+
+				<Spinner
+					color='crimson'
+					animation='fade'
+					// set visibility of Spinner
+					visible={loading}
+					//text shown the Spinner
+					textContent={'Fetching data...'} //shown on overlay
+					//style of the Spinner text
+					textStyle={styles.spinnerTextStyle}
+				/>
+
 				<Text>Enter your Username or Email:</Text>
 				<TextInput
 					placeholder="Email"
@@ -97,6 +120,7 @@ export default function Login({navigation}) {
 					onPress={() => {
 						setPress(true);
 						loginUser();
+						startLoading(); //call spinner
 					}}
 				/>
 				<Text></Text>
@@ -121,7 +145,7 @@ const styles = StyleSheet.create({
 		color: 'red',
 	},
 	textbox: {
-		borderColor: 'blue',
+		borderColor: 'crimson',
 		borderWidth: 1,
 		padding: 8,
 		margin: 10,
@@ -137,4 +161,7 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 		margin: 40,
 	},
+	spinnerTextStyle: {
+		color: 'crimson'
+	  },
 });
