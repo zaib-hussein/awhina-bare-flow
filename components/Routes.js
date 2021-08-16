@@ -1,10 +1,10 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import LoginScreen from './login/login';
-import RegisterScreen from './register/register';
-import HomeScreen from './home/home';
-import AboutScreen from './about/about';
+import LoginScreen from './screens/login/login';
+import RegisterScreen from './screens/register/register';
+import HomeScreen from './screens/home/home';
+import AboutScreen from './screens/about/about';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
 const Stack = createStackNavigator();
