@@ -1,5 +1,8 @@
 import firebase from 'firebase';
+import 'firebase/auth';
+import 'firebase/firestore';
 import '@react-native-firebase/auth';
+import '@react-native-firebase/app';
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyAwb_T1CUeLpkSMuZA_-WU1BQ1EaHQzcm8',
@@ -11,7 +14,18 @@ const firebaseConfig = {
 	measurementId: 'G-64LH9LBBV3',
 };
 
-firebase.initializeApp(firebaseConfig);
+let app;
+if(firebase.apps.length === 0){
+	app = firebase.initializeApp(firebaseConfig);
+}
+
+else{
+	app = firebase.app()
+}
+
+const db = app.firestore();
+const auth = firebase.auth();
+export { db, auth };
 
 export function createNewUser() {
 	firebase
@@ -54,3 +68,5 @@ export function logoutUser() {
 			//Could not log out
 		});
 }
+
+

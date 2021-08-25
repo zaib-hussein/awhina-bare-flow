@@ -1,26 +1,27 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View, Button, TextInput} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Button, TextInput, Keyboard } from 'react-native';
 import firebase from 'firebase';
 import * as Animatable from 'react-native-animatable';
 import '@react-native-firebase/app';
 import '@react-native-firebase/auth';
+import {db, auth} from '../firebase/firebaseconfig';
 
-const firebaseConfig = {
-	apiKey: 'AIzaSyAwb_T1CUeLpkSMuZA_-WU1BQ1EaHQzcm8',
-	authDomain: 'awhina-app.firebaseapp.com',
-	projectId: 'awhina-app',
-	storageBucket: 'awhina-app.appspot.com',
-	messagingSenderId: '592015836706',
-	appId: '1:592015836706:web:c1f2b1e1c05a3ed7bc6c7b',
-	measurementId: 'G-64LH9LBBV3',
-};
+// const firebaseConfig = {
+// 	apiKey: 'AIzaSyAwb_T1CUeLpkSMuZA_-WU1BQ1EaHQzcm8',
+// 	authDomain: 'awhina-app.firebaseapp.com',
+// 	projectId: 'awhina-app',
+// 	storageBucket: 'awhina-app.appspot.com',
+// 	messagingSenderId: '592015836706',
+// 	appId: '1:592015836706:web:c1f2b1e1c05a3ed7bc6c7b',
+// 	measurementId: 'G-64LH9LBBV3',
+// };
 
-firebase.initializeApp(firebaseConfig);
+//firebase.initializeApp(firebaseConfig);
 
-export default function Login({navigation}) {
+export default function Login({ navigation }) {
+	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [press, setPress] = useState(false);
 	const [loginErrorMessage, setLoginErrorMessage] = useState('');
 
 	// function createNewUser() {
@@ -40,19 +41,17 @@ export default function Login({navigation}) {
 	// }
 
 	function loginUser() {
-		if (email && password && press) {
-			firebase
-				.auth()
+		if (email && password) {
+				auth
 				.signInWithEmailAndPassword(email, password)
 				.then((userCredential) => {
 					//Logged in
-					var user = userCredential.user;
 					goToHomeScreen();
 				})
 				.catch((error) => {
 					//Not Logged In
-					var errorCode = error.code;
-					var errorMessage = error.message;
+					let errorCode = error.code;
+					let errorMessage = error.message;
 					setLoginErrorMessage(errorMessage);
 				});
 		}
@@ -95,7 +94,7 @@ export default function Login({navigation}) {
 					style={styles.loginButton}
 					title="Login"
 					onPress={() => {
-						setPress(true);
+						Keyboard.dismiss();
 						loginUser();
 					}}
 				/>
