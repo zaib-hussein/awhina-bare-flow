@@ -1,62 +1,43 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, Button, TextInput} from 'react-native';
-import firebase from 'firebase';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  Keyboard,
+} from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import firebase from '../../../firebase/firebaseconfig';
 import '@react-native-firebase/app';
 import '@react-native-firebase/auth';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyAwb_T1CUeLpkSMuZA_-WU1BQ1EaHQzcm8',
-  authDomain: 'awhina-app.firebaseapp.com',
-  projectId: 'awhina-app',
-  storageBucket: 'awhina-app.appspot.com',
-  messagingSenderId: '592015836706',
-  appId: '1:592015836706:web:c1f2b1e1c05a3ed7bc6c7b',
-  measurementId: 'G-64LH9LBBV3',
-};
-
-firebase.initializeApp(firebaseConfig);
+import firestore from '@react-native-firebase/firestore';
 
 export default function Login({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [press, setPress] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
 
-  // function createNewUser() {
-  // 	firebase
-  // 		.auth()
-  // 		.createUserWithEmailAndPassword(email, password)
-  // 		.then((userCredential) => {
-  // 			//Logged In
-  // 			var user = userCredential.user;
-  // 		})
-  // 		.catch((error) => {
-  // 			//Not Logged In
-  // 			var errorCode = error.code;
-  // 			var errorMessage = error.message;
-  // 			console.log(`${error.code}: ${error.message}`);
-  // 		});
-  // }
+  const firestore = firebase.firestore();
 
-  function loginUser() {
-    if (email && password && press) {
+  const loginUser = () => {
+    if (email && password) {
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
-          //Logged in
-          var user = userCredential.user;
+          // Logged in
+          const user = userCredential.user;
           goToHomeScreen();
         })
         .catch((error) => {
-          //Not Logged In
-          var errorCode = error.code;
-          var errorMessage = error.message;
+          // Not Logged In
+          const errorCode = error.code;
+          const errorMessage = error.message;
           setLoginErrorMessage(errorMessage);
         });
     }
-  }
+  };
 
   const goToRegisterScreen = () => {
     navigation.navigate('Register');
@@ -86,27 +67,30 @@ export default function Login({navigation}) {
           style={styles.textbox}
           onChangeText={(text) => setPassword(text)}
         />
+
         {loginErrorMessage !== '' ? null : (
           <Animatable.View animation="fadeInLeft" duration={500}>
             <Text style={styles.errorText}>{loginErrorMessage}</Text>
           </Animatable.View>
         )}
+
         <Button
           style={styles.loginButton}
           title="Login"
           onPress={() => {
-            setPress(true);
+            Keyboard.dismiss();
             loginUser();
           }}
         />
+
         <Text></Text>
+
         <Button
           style={styles.regisButton}
           title="Register"
           onPress={() => goToRegisterScreen()}
         />
       </View>
-      <View></View>
     </View>
   );
 }

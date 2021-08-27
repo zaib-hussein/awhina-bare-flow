@@ -4,6 +4,7 @@
     // Override our default settings just for this directory
     "eqeqeq": "warn",
     "strict": "off",
-    "operator-linebreak": "off"
+    "operator-linebreak": "off",
+    "linebreak-style": "off"
   }
 }

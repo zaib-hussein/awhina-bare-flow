@@ -13,44 +13,45 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-export function createNewUser() {
-	firebase
-		.auth()
-		.createUserWithEmailAndPassword(email, password)
-		.then((userCredential) => {
-			//Logged In
-			var user = userCredential.user;
-		})
-		.catch((error) => {
-			//Not Logged In
-			var errorCode = error.code;
-			var errorMessage = error.message;
-		});
-}
+export default firebase;
+// export function createNewUser() {
+// 	firebase
+// 		.auth()
+// 		.createUserWithEmailAndPassword(email, password)
+// 		.then((userCredential) => {
+// 			//Logged In
+// 			var user = userCredential.user;
+// 		})
+// 		.catch((error) => {
+// 			//Not Logged In
+// 			var errorCode = error.code;
+// 			var errorMessage = error.message;
+// 		});
+// }
 
-export function loginUser() {
-	firebase
-		.auth()
-		.signInWithEmailAndPassword(email, password)
-		.then((userCredential) => {
-			//Logged in
-			var user = userCredential.user;
-		})
-		.catch((error) => {
-			//Not Logged In
-			var errorCode = error.code;
-			var errorMessage = error.message;
-		});
-}
+// export function loginUser() {
+// 	firebase
+// 		.auth()
+// 		.signInWithEmailAndPassword(email, password)
+// 		.then((userCredential) => {
+// 			//Logged in
+// 			var user = userCredential.user;
+// 		})
+// 		.catch((error) => {
+// 			//Not Logged In
+// 			var errorCode = error.code;
+// 			var errorMessage = error.message;
+// 		});
+// }
 
-export function logoutUser() {
-	firebase
-		.auth()
-		.signOut()
-		.then(() => {
-			//Logged Out
-		})
-		.catch((error) => {
-			//Could not log out
-		});
-}
+// export function logoutUser() {
+// 	firebase
+// 		.auth()
+// 		.signOut()
+// 		.then(() => {
+// 			//Logged Out
+// 		})
+// 		.catch((error) => {
+// 			//Could not log out
+// 		});
+// }
