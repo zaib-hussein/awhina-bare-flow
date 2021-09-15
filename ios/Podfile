@@ -9,7 +9,8 @@ pod 'Firebase/Analytics'
 pod 'Firebase/Auth'
 
 
-target 'awhina' do
+
+target 'hello' do
   use_unimodules!
   config = use_native_modules!
 
