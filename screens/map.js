@@ -1,28 +1,79 @@
 import { StyleSheet, Text,Platform,View} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import React, {Component} from 'react';
+import Geolocation from '@react-native-community/geolocation';
 
-class Map extends Component {
 
+
+export class Map extends Component {
+
+  constructor(props){
+    super(props);
+    this.state={
+      latitude:0,
+      longitude:0,
+      latitudeDelta:0,
+      longitudeDelta:0
+    };
+  }
+  
+  componentDidMount(){
+    this.requestLocationPermission();
+  }
+
+  requestLocationPermission = async () => {
+    if(Platform.OS === 'ios'){
+      var response = await request (PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+
+      if (response === 'granted'){
+        this.locationCurrentPosition();
+      }
+      }
+      else{
+        var response = await request (PERMISSIONS.ANDROID.ACCESS_FIINE_LOCATION);
+        
+        if(response === 'granted'){
+          this.locationCurrentPosition();
+        }
+
+      }
+      
+    }
+  
+
+  locationCurrentPosition =()=>{
+    Geolocation.getCurrentPosition(
+      position => {
+        console.log(JSON.stringify(position));
+  
+        let initialPosition = {
+          latitude:position.latitude,
+          longitude:position.longitude,
+          latitudeDelta:0.0812,
+          longitudeDelta:0.0402
+        }
+        this.setState({initialPosition});
+      },
+    )
+  }
+ 
     render() {
       return (
           <MapView
+              ref = {map => this._map = map}
               showsUserLocation={true}
               style={styles.map}
-              initialRegion={{
-                latitude: -36.858755,
-                longitude: 174.76163,
-                latitudeDelta: 0.0812,
-                longitudeDelta: 0.0402,
+              initialRegion={this.state.initialPosition
+
                 
-              }}
-          />
+              }
+          ></MapView>
       );
     }
   
   }
 
-  export default Map;
+  
 
   const styles = StyleSheet.create({
   container: {
@@ -45,5 +96,5 @@ class Map extends Component {
     //   height: 500,
   },
 });
-
+export default Map;
 ///
