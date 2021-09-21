@@ -117,6 +117,7 @@ function MyTabs() {
 				name="Map"
 				component={MapScreen}
 				options={{
+					headerShown: false,
 					tabBarLabel: 'Map',
 					tabBarIcon: ({color, size, focused}) => (
 						// <MaterialCommunityIcons name="map" color={color} size={size} />

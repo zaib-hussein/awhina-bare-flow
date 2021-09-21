@@ -6,8 +6,8 @@ import Onboarding from 'react-native-onboarding-swiper';
 const Tutorial = ({navigation}) => {
     return( //array for tutorial pages
         <Onboarding
-            onSkip={() => navigation.navigate("Login")}
-            onDone={() => navigation.navigate("Login")}
+            onSkip={() => navigation.navigate("Home")}
+            onDone={() => navigation.navigate("Home")}
 
             pages={[
             {
