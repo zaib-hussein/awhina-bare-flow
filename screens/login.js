@@ -4,7 +4,7 @@ import firebase from 'firebase';
 import * as Animatable from 'react-native-animatable';
 import '@react-native-firebase/app';
 import '@react-native-firebase/auth';
-import {db, auth} from '../firebase/firebaseconfig';
+import {auth} from '../firebase/firebaseconfig';
 
 // const firebaseConfig = {
 // 	apiKey: 'AIzaSyAwb_T1CUeLpkSMuZA_-WU1BQ1EaHQzcm8',

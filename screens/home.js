@@ -6,7 +6,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import SettingScreen from './setting';
 import EmergencyScreen from './emergency';
-import InboxScreen from './inbox';
+import InboxScreen from './chatList';
 import MapScreen from './map';
 import ProfileScreen from './profile';
 

@@ -49,6 +49,7 @@ export function loginUser() {
 		.then((userCredential) => {
 			//Logged in
 			var user = userCredential.user;
+			user.displayName("firstname");
 		})
 		.catch((error) => {
 			//Not Logged In
