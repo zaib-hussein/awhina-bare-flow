@@ -5,23 +5,17 @@ export class EmergencyOption extends React.Component {
   getUri() {
     switch (this.props.type) {
       case 'water':
-        return require('./emergency-icons/water.png');
-        break;
+        return require('../icons/water.png');
       case 'clothes':
-        return require('./emergency-icons/clothes.png');
-        break;
+        return require('../icons/clothes.png');
       case 'food':
-        return require('./emergency-icons/food.png');
-        break;
+        return require('../icons/food.png');
       case 'lost':
-        return require('./emergency-icons/lost.png');
-        break;
+        return require('../icons/lost.png');
       case 'shelter':
-        return require('./emergency-icons/shelter.png');
-        break;
+        return require('../icons/shelter.png');
       default:
-        return require('./emergency-icons/question-mark.png')
-        break;
+        return require('../icons/question-mark.png');
     }
   }
 

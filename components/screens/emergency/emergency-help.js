@@ -19,7 +19,7 @@ export default function EmergencyHelp() {
             alert('I Need Water');
           }}
         >
-          <Image source={require('./emergency-icons/water.png')} />
+          <Image source={require('../icons/water.png')} />
         </TouchableOpacity>
         <Text>WATER</Text>
 
@@ -29,7 +29,7 @@ export default function EmergencyHelp() {
             alert('I Need Food');
           }}
         >
-          <Image source={require('./emergency-icons/food.png')} />
+          <Image source={require('../icons/food.png')} />
         </TouchableOpacity>
         <Text>FOOD</Text>
 
@@ -39,7 +39,7 @@ export default function EmergencyHelp() {
             alert('I Need Shelter');
           }}
         >
-          <Image source={require('./emergency-icons/shelter.png')} />
+          <Image source={require('../icons/shelter.png')} />
         </TouchableOpacity>
         <Text>SHELTER</Text>
 
@@ -49,7 +49,7 @@ export default function EmergencyHelp() {
             alert('I Need Help Finding Way');
           }}
         >
-          <Image source={require('./emergency-icons/lost.png')} />
+          <Image source={require('../icons/lost.png')} />
         </TouchableOpacity>
         <Text>LOST</Text>
 
@@ -59,7 +59,7 @@ export default function EmergencyHelp() {
             alert('I Need clothes');
           }}
         >
-          <Image source={require('./emergency-icons/clothes.png')} />
+          <Image source={require('../icons/clothes.png')} />
         </TouchableOpacity>
         <Text>CLOTHES</Text>
       </View>

@@ -7,37 +7,73 @@ import {
   TextInput,
   Keyboard,
 } from 'react-native';
+import firebase from 'firebase';
 import * as Animatable from 'react-native-animatable';
-import firebase from '../../../firebase/firebaseconfig';
 import '@react-native-firebase/app';
 import '@react-native-firebase/auth';
-import {firestore} from 'firebase/firestore';
+import {db, auth} from '../../../firebase/firebaseconfig';
+import Spinner from 'react-native-loading-spinner-overlay';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyAwb_T1CUeLpkSMuZA_-WU1BQ1EaHQzcm8',
+  authDomain: 'awhina-app.firebaseapp.com',
+  projectId: 'awhina-app',
+  storageBucket: 'awhina-app.appspot.com',
+  messagingSenderId: '592015836706',
+  appId: '1:592015836706:web:c1f2b1e1c05a3ed7bc6c7b',
+  measurementId: 'G-64LH9LBBV3',
+};
+
+// firebase.initializeApp(firebaseConfig);
 
 export default function Login({navigation}) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
 
-  const firestore = firebase.firestore();
-
-  const loginUser = () => {
-    if (email && password) {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          // Logged in
-          const user = userCredential.user;
-          goToHomeScreen();
-        })
-        .catch((error) => {
-          // Not Logged In
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          setLoginErrorMessage(errorMessage);
-        });
-    }
+  // activity spinner///////////////////////////////////
+  const [loading, setLoading] = useState(false);
+  const startLoading = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1800);
   };
+  // //////////////////////////////////////////////////
+
+  // function createNewUser() {
+  // 	firebase
+  // 		.auth()
+  // 		.createUserWithEmailAndPassword(email, password)
+  // 		.then((userCredential) => {
+  // 			//Logged In
+  // 			var user = userCredential.user;
+  // 		})
+  // 		.catch((error) => {
+  // 			//Not Logged In
+  // 			var errorCode = error.code;
+  // 			var errorMessage = error.message;
+  // 			console.log(`${error.code}: ${error.message}`);
+  // 		});
+  // }
+
+  function loginUser() {
+    if (email && password) {
+      auth.signInWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            // Logged in
+            goToHomeScreen();
+            // setLoading(false); //set spinner to flase to stop loading
+          })
+          .catch((error) => {
+            // Not Logged In
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setLoginErrorMessage(errorMessage);
+          });
+    }
+  }
 
   const goToRegisterScreen = () => {
     navigation.navigate('Register');
@@ -48,49 +84,57 @@ export default function Login({navigation}) {
     navigation.navigate('Home');
   };
 
-  // state={isLoading: false};
-  // <ActivityIndicator size="large" color="black" animating={this.state.isLoading} />
-
   return (
     <View style={styles.login}>
       <View>
+        <Spinner
+          color='crimson'
+          animation='fade'
+          // set visibility of Spinner
+          visible={loading}
+          // text shown the Spinner
+          textContent={'Fetching data...'} // shown on overlay
+          // style of the Spinner text
+          textStyle={styles.spinnerTextStyle}
+        />
+
         <Text>Enter your Username or Email:</Text>
         <TextInput
-          placeholder="Email"
+          placeholder='Email'
           style={styles.textbox}
           onChangeText={(text) => setEmail(text)}
         />
         <Text>Enter your password:</Text>
         <TextInput
-          placeholder="Password"
+          placeholder='Password'
           secureTextEntry={true}
           style={styles.textbox}
           onChangeText={(text) => setPassword(text)}
         />
-
         {loginErrorMessage !== '' ? null : (
-          <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorText}>{loginErrorMessage}</Text>
-          </Animatable.View>
-        )}
-
+					<Animatable.View animation='fadeInLeft' duration={500}>
+					  <Text style={styles.errorText}>
+					    {loginErrorMessage}
+					  </Text>
+					</Animatable.View>
+				)}
         <Button
           style={styles.loginButton}
-          title="Login"
+          title='Login'
           onPress={() => {
             Keyboard.dismiss();
             loginUser();
+            startLoading(); // call spinner
           }}
         />
-
         <Text></Text>
-
         <Button
           style={styles.regisButton}
-          title="Register"
+          title='Register'
           onPress={() => goToRegisterScreen()}
         />
       </View>
+      <View></View>
     </View>
   );
 }
@@ -105,7 +149,7 @@ const styles = StyleSheet.create({
     color: 'red',
   },
   textbox: {
-    borderColor: 'blue',
+    borderColor: 'crimson',
     borderWidth: 1,
     padding: 8,
     margin: 10,
@@ -120,5 +164,8 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     marginTop: 20,
     margin: 40,
+  },
+  spinnerTextStyle: {
+    color: 'crimson',
   },
 });

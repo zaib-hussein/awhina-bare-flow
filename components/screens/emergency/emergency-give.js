@@ -22,7 +22,7 @@ export default function EmergencyGive() {
             alert('I can give Food');
           }}
         >
-          <Image source={require('..icons')} />
+          <Image source={require('../icons/food.png')} />
         </TouchableOpacity>
         <Text>FOOD</Text>
 
@@ -32,7 +32,7 @@ export default function EmergencyGive() {
             alert('I can provide Shelter');
           }}
         >
-          <Image source={require('..icons/shelter.png')} />
+          <Image source={require('../icons/shelter.png')} />
         </TouchableOpacity>
         <Text>SHELTER</Text>
 
@@ -42,7 +42,7 @@ export default function EmergencyGive() {
             alert('I can find someone');
           }}
         >
-          <Image source={require('..icons/lost.png')} />
+          <Image source={require('../icons/lost.png')} />
         </TouchableOpacity>
         <Text>LOST</Text>
 
@@ -52,7 +52,7 @@ export default function EmergencyGive() {
             alert('I can provide clothes');
           }}
         >
-          <Image source={require('..icons/clothes.png')} />
+          <Image source={require('../icons/clothes.png')} />
         </TouchableOpacity>
         <Text>CLOTHES</Text>
       </View>

@@ -7,7 +7,7 @@ const Splash = ({ navigation }) => {
         <View style={styles.container}>
             <View style={styles.lottieView}>
                 <LottieView
-                    source={require('./icons/splash.json')}
+                    source={require('../icons/splash.json')}
                     autoPlay={true}
                     loop={false}
                     onAnimationFinish={() => navigation.navigate("Login")}
