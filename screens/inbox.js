@@ -19,28 +19,22 @@ export default function inbox() {
     const [text, setText] = useState('');
     const [messages, setMessages] = useState([]);
 
-    // useLayoutEffect(() => {
-    //   const unsubscribe = db.collection('chats').orderBy('createdAt', 
-    //   'desc').onSnapshot(snapshot=>setMessages(
-    //     snapshot.docs.map(doc=>({
-    //       _id: doc.data()._id,
-    //       createdAt: doc.data().createdAt.toDate(),
-    //       text: doc.data().text,
-    //       user: doc.data().user
-    //     }))
-    //   ))
-    //   return unsubscribe;
-    // }, [])
+    useLayoutEffect(() => {
+      const unsubscribe = db.collection('chats').orderBy('createdAt', 
+      'desc').onSnapshot(snapshot=>setMessages(
+        snapshot.docs.map(doc=>({
+          _id: doc.data()._id,
+          createdAt: doc.data().createdAt.toDate(),
+          text: doc.data().text,
+          user: doc.data().user
+        }))
+      ))
+      return unsubscribe;
+    }, [])
   
     const onSend = (newMessages = []) => {
       setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages));
       const message = newMessages[0];
-      /*{
-        _id,
-        createdAt,
-        text,
-        user
-      } = newMessages[0];*/
       db.collection('chats').add(message);
     };
   
@@ -52,7 +46,7 @@ export default function inbox() {
         onSend={messages => onSend(messages)}
         user={{
           _id: '1',
-          name: auth?.currentUser?.displayName
+          name: 'test'
           //avatar: 'https://placeimg.com/150/150/any',
         }}
         alignTop
