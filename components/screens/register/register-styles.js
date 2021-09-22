@@ -1,4 +1,4 @@
-import {StyleSheet} from 'React-Native';
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   login: {

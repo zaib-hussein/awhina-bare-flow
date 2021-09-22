@@ -1,10 +1,13 @@
 {
   "parser": "babel-eslint",
+
   "rules": {
     // Override our default settings just for this directory
     "eqeqeq": "warn",
     "strict": "off",
     "operator-linebreak": "off",
-    "linebreak-style": "off"
+    "linebreak-style": "warn",
+    "require-jsdoc": "off",
+    "no-tabs": "off"
   }
 }

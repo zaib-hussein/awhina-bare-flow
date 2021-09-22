@@ -14,7 +14,7 @@ import * as Animatable from 'react-native-animatable';
 import '@react-native-firebase/app';
 import '@react-native-firebase/auth';
 import firebase from '../../../firebase/firebaseconfig';
-import firestore from '@react-native-firebase/firestore';
+import {firestore} from 'firebase/firestore';
 /* Styles */
 import {styles} from './register-styles';
 

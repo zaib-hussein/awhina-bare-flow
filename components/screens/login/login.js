@@ -11,7 +11,7 @@ import * as Animatable from 'react-native-animatable';
 import firebase from '../../../firebase/firebaseconfig';
 import '@react-native-firebase/app';
 import '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import {firestore} from 'firebase/firestore';
 
 export default function Login({navigation}) {
   const [email, setEmail] = useState('');
