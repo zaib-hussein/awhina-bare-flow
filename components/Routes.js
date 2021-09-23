@@ -12,7 +12,11 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
+<<<<<<< HEAD
 const initialStack = () => (
+=======
+const mainStack = () => (
+>>>>>>> parent of f1b6e88 (UI update)
   <Stack.Navigator initialRouteName="Login">
     <Stack.Screen name="Login" component={LoginScreen} />
     <Stack.Screen name="Register" component={RegisterScreen} />
@@ -20,6 +24,7 @@ const initialStack = () => (
   </Stack.Navigator>
 );
 
+<<<<<<< HEAD
 const mainStack = () => (
   <Stack.Navigator initialRouteName="Home">
     <Stack.Screen
@@ -27,6 +32,11 @@ const mainStack = () => (
       component={HomeScreen}
       options={{headerShown: false}}
     />
+=======
+const secondStack = () => (
+  <Stack.Navigator initialRouteName="Home">
+    <Stack.Screen name="Home" component={HomeScreen} />
+>>>>>>> parent of f1b6e88 (UI update)
     <Stack.Screen name="About" component={AboutScreen} />
   </Stack.Navigator>
 );

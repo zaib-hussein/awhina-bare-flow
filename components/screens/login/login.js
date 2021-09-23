@@ -11,6 +11,7 @@ import firebase from 'firebase';
 import * as Animatable from 'react-native-animatable';
 import '@react-native-firebase/app';
 import '@react-native-firebase/auth';
+<<<<<<< HEAD
 import {db, auth} from '../../../firebase/firebaseconfig';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -25,6 +26,9 @@ const firebaseConfig = {
 };
 
 // firebase.initializeApp(firebaseConfig);
+=======
+import firestore from '@react-native-firebase/firestore';
+>>>>>>> parent of f1b6e88 (UI update)
 
 export default function Login({navigation}) {
   const [name, setName] = useState('');

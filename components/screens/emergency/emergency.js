@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,44 +6,61 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  StatusBar
 } from 'react-native';
-import EmergencyGive from './emergency-give';
-import EmergencyHelp from './emergency-help';
 
 export default function Emergency() {
-  const [selectedOption, setSelectedOption] = useState('');
-
-  useEffect(() => {
-    if (selectedOption === 'give') {
-    } else if (selectedOption === 'help') {
-    } else {
-      setSelectedOption('');
-    }
-  });
-
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {selectedOption ? (
-        selectedOption === 'give' ? (
-          <EmergencyGive />
-        ) : selectedOption === 'help' ? (
-          <EmergencyHelp />
-        ) : null
-      ) : null}
-      <View style={styles.options}>
+    <ScrollView>
+      <View style={styles.container}>
         <TouchableOpacity
-          style={styles.give}
-          onPress={() => setSelectedOption('give')}
+          style={styles.button}
+          onPress={() => {
+            alert('I Need Water');
+          }}
         >
-          <Text>GIVE - HELP OTHERS</Text>
+          <Image source={require('./emergency-icons/water.png')} />
         </TouchableOpacity>
+        <Text>WATER</Text>
+
         <TouchableOpacity
-          style={styles.help}
-          onPress={() => setSelectedOption('help')}
+          style={styles.button}
+          onPress={() => {
+            alert('I Need Food');
+          }}
         >
-          <Text>HELP - YOU NEED HELP</Text>
+          <Image source={require('./emergency-icons/food.png')} />
         </TouchableOpacity>
+        <Text>FOOD</Text>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            alert('I Need Shelter');
+          }}
+        >
+          <Image source={require('./emergency-icons/shelter.png')} />
+        </TouchableOpacity>
+        <Text>SHELTER</Text>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            alert('I Need Help Finding Way');
+          }}
+        >
+          <Image source={require('./emergency-icons/lost.png')} />
+        </TouchableOpacity>
+        <Text>LOST</Text>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            alert('I Need clothes');
+          }}
+        >
+          <Image source={require('./emergency-icons/clothes.png')} />
+        </TouchableOpacity>
+        <Text>CLOTHES</Text>
       </View>
     </ScrollView>
   );
@@ -51,15 +68,12 @@ export default function Emergency() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     // backgroundColor: '#ff4500', ///background color for contain.
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    flexDirection: 'column',
-    flexWrap: 'nowrap',
-    marginTop: StatusBar,
-    height: '80%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 0,
     width: '100%',
-    marginTop: 10,
     // height: 40,
 
     //following styles arrange items into grid, commenting this will make vertical layout
@@ -70,30 +84,20 @@ const styles = StyleSheet.create({
     // paddingTop: 50,
     // marginTop: 100,
   },
+
   button: {
     backgroundColor: '#FFF',
     borderRadius: 10,
+
+    // padding: 0,
+    // marginTop: 5,
+    // marginBottom: 30, //orignal = 10
+
     shadowColor: '#ff0000',
     shadowOffset: {width: 1, height: 5},
     shadowRadius: 10,
     shadowOpacity: 0.35,
+    //  width: 290,
+    // height: 100,
   },
-  help: {
-    color: 'black',
-    backgroundColor: 'red',
-    padding: 10,
-    borderRadius: 10,
-    margin: 10,
-  },
-  give: {
-    color: 'black',
-    backgroundColor: 'green',
-    padding: 10,
-    borderRadius: 10,
-    margin: 10,
-  },
-  options: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  }
 });
