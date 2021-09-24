@@ -7,7 +7,7 @@ import {MaterialCommunityIcons} from '@expo/vector-icons';
 import LottieView from 'lottie-react-native';
 import SettingScreen from './setting';
 import EmergencyScreen from './emergency';
-import InboxScreen from './chatList';
+import InboxScreen from './inbox';
 import MapScreen from './map';
 import ProfileScreen from './profile';
 
