@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, Image } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
+import { marginTop } from 'styled-system';
 
 
 const Tutorial = ({navigation}) => {
@@ -18,19 +19,19 @@ const Tutorial = ({navigation}) => {
             },
             {
                 backgroundColor: '#008080',
-                image: <Image source={require('./icons/awhina.png')} />,
+                image: <Image source={require('./icons/give:help.png')} />,
                 title: 'This will be the default screen where a user can select to give or receive help',
                 subtitle: 'Click on either Give or Receive options.',
             },
             {
                 backgroundColor: '#90ee90',
-                image: <Image source={require('./icons/awhina.png')} />,
+                image: <Image source={require('./icons/help.png')} />,
                 title: 'GIVE HELP screen',
                 subtitle: "select from options with what you would like to help with",
             },
             {
                 backgroundColor: '#cd5c5c',
-                image: <Image source={require('./icons/awhina.png')} />,
+                image: <Image source={require('./icons/give.png')} />,
                 title: 'RECEIVE HELP screen',
                 subtitle: "click on options available on screen to send a request onto nearby users",
             },
