@@ -1,59 +1,12 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image, ScrollView} from 'react-native';
+import EmergencyGive from './emergency-give';
 
 export default function Emergency() {
 	return (
 		<ScrollView>
 		<View style={styles.container}>
-			<TouchableOpacity
-				style={styles.button}
-				onPress={() => {
-					alert('I Need Water');
-				}}
-			>
-				<Image source={require('./icons/water.png')} />
-			</TouchableOpacity>
-			<Text>WATER</Text>
-
-			<TouchableOpacity
-				style={styles.button}
-				onPress={() => {
-					alert('I Need Food');
-				}}
-			>
-				<Image source={require('./icons/food.png')} />
-			</TouchableOpacity>
-			<Text>FOOD</Text>
-
-			<TouchableOpacity
-				style={styles.button}
-				onPress={() => {
-					alert('I Need Shelter');
-				}}
-			>
-				<Image source={require('./icons/shelter.png')} />
-			</TouchableOpacity>
-			<Text>SHELTER</Text>
-
-			<TouchableOpacity
-				style={styles.button}
-				onPress={() => {
-					alert('I Need Help Finding Way');
-				}}
-			>
-				<Image source={require('./icons/lost.png')} />
-			</TouchableOpacity>
-			<Text>LOST</Text>
-
-			<TouchableOpacity
-				style={styles.button}
-				onPress={() => {
-					alert('I Need clothes');
-				}}
-			>
-				<Image source={require('./icons/clothes.png')} />
-			</TouchableOpacity>
-			<Text>CLOTHES</Text>
+			<EmergencyGive />
 		</View>
 		</ScrollView>
 	);
