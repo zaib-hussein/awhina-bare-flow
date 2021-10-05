@@ -15,7 +15,9 @@ const Drawer = createDrawerNavigator();
 const mainStack = () =>(
 
 <Stack.Navigator initialRouteName="Login">
-<Stack.Screen name="Login" component={LoginScreen} />
+<Stack.Screen name="Login" component={LoginScreen}
+options={{headerShown: false,}}
+/>
 <Stack.Screen name="Register" component={RegisterScreen} />
 <Stack.Screen name="Splash" component={Splash} />
 
@@ -24,7 +26,7 @@ const mainStack = () =>(
 
 const secondStack = () => (
   <Stack.Navigator initialRouteName="Home">
-  <Stack.Screen name="Home" component={HomeScreen} 
+  <Stack.Screen name="Home" component={HomeScreen}
     options={{headerShown: false,}}
 
   />
@@ -50,4 +52,3 @@ function Routes() {
   );
 }
 export default Routes;
-
