@@ -1,14 +1,8 @@
 import React from 'react';
 import {
-	StyleSheet,
-	Text,
-	View,
-	TouchableOpacity,
-	Image,
-	ScrollView,
+    SafeAreaView,
 	FlatList,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {EmergencyOption} from './emergency-option';
 
 const emergencyOptions = [

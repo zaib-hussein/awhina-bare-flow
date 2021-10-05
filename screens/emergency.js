@@ -1,14 +1,110 @@
-import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Image, ScrollView} from 'react-native';
+import React, {useState} from 'react';
+import {
+	StyleSheet,
+	Text,
+	View,
+	TouchableOpacity,
+	Image,
+	ScrollView,
+	StatusBar,
+} from 'react-native';
+import {flex} from 'styled-system';
 import EmergencyGive from './emergency-give';
 
 export default function Emergency() {
+	const [selected, setSelected] = useState('');
+	const [options, setOptions] = useState(() => [
+		{type: 'Water', isHelp: false},
+		{type: 'Food', isHelp: false},
+		{type: 'Shelter', isHelp: false},
+		{type: 'Lost', isHelp: false},
+		{type: 'Clothes', isHelp: false},
+		{type: '', isHelp: false},
+	]);
+
+	const handleSetOptions = e => {
+		setOptions(lastOptions => {
+			let newOptions = lastOptions.forEach(item => (item.isHelp = e));
+			return newOptions;
+		});
+	};
+
+	const handleSelected = e => {
+		return e.id;
+	};
+
 	return (
-		<ScrollView>
-		<View style={styles.container}>
-			<EmergencyGive />
+		<View style={{flex: 1, alignItems: 'stretch'}}>
+			{/* <Text style={{height: '20%'}}>
+				{selected}
+			</Text>  */}
+			<ScrollView>
+				<View style={styles.container}>
+					<EmergencyGive />
+				</View>
+			</ScrollView>
+			<View
+				style={{
+					flexDirection: 'row',
+					justifyContent: 'space-around',
+					alignContent: 'flex-end',
+					marginBottom: 20,
+				}}>
+				<TouchableOpacity
+					onPress={() => {}}
+					style={[
+						{
+							display: 'flex',
+							height: 50,
+							width: '25%',
+							justifyContent: 'center',
+							alignItems: 'center',
+							borderRadius: 10,
+							bordercolor: '#009387',
+							borderWidth: 1,
+							backgroundColor: '#00eeaa',
+							marginTop: 20,
+						},
+					]}>
+					<Text
+						style={[
+							{
+								justifyContent: 'center',
+								alignItems: 'center',
+								textAlignVertical: 'center',
+								color: 'black',
+							},
+						]}>
+						Give
+					</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					onPress={() => {}}
+					style={{
+						display: 'flex',
+						height: 50,
+						width: '25%',
+						justifyContent: 'center',
+						alignItems: 'center',
+						borderRadius: 10,
+						bordercolor: '#009387',
+						borderWidth: 1,
+						backgroundColor: 'crimson',
+						marginTop: 20,
+					}}>
+					<Text
+						style={{
+							justifyContent: 'center',
+							alignItems: 'center',
+							textAlignVertical: 'center',
+							color: 'white',
+						}}>
+						Help
+					</Text>
+				</TouchableOpacity>
+			</View>
 		</View>
-		</ScrollView>
 	);
 }
 
@@ -18,7 +114,7 @@ const styles = StyleSheet.create({
 		// backgroundColor: '#ff4500', ///background color for contain.
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: 40,	//bring help tions down on screen
+		marginTop: 40, //bring help tions down on screen
 		width: '100%',
 		// height: 40,
 
