@@ -20,7 +20,7 @@ export class EmergencyOption extends React.Component {
 				return require('./icons/shelter.png');
 				break;
 			default:
-				return require('./icons/lost.png');
+				return require('./icons/unknown.png');
 				break;
 		}
 	}
@@ -40,11 +40,12 @@ export class EmergencyOption extends React.Component {
 			<TouchableOpacity
 				style={
 					this.getIsHelp() === 'can give'
-						? styles.giveButton
-						: styles.helpButton
+						? styles.giveOption
+						: styles.helpOption
 				}
 				onPress={() => {
 					Alert.alert(
+                        {/* Functionality with Map Goes in here*/}
 						`${this.getIsHelpTitle()}`,
 						`You ${this.getIsHelp()} ${this.props.type}`
 					);
@@ -57,25 +58,31 @@ export class EmergencyOption extends React.Component {
 }
 
 const styles = StyleSheet.create({
-	giveButton: {
+	giveOption: {
 		display: 'flex',
-		backgroundColor: 'crimson',
+		backgroundColor: '#DE5050',
 		borderRadius: 10,
 		padding: 10,
 		margin: 5,
-		// shadowColor: '#ff0000',
-		// shadowOffset: {width: 1, height: 5},
-		// shadowRadius: 10,
-		// shadowOpacity: 0.35,
+		shadowColor: '#ff0000',
+		shadowOffset: {width: 1, height: 5},
+		shadowRadius: 10,
+		shadowOpacity: 0.35,
 		color: 'white',
+		justifyContent: 'center',
 	},
-	helpButton: {
+	helpOption: {
 		display: 'flex',
-		backgroundColor: '#90ee90',
+		backgroundColor: '#50DE80',
 		borderRadius: 10,
 		padding: 10,
 		margin: 5,
-        color: 'black',
+		shadowColor: '#ff0000',
+		shadowOffset: {width: 1, height: 5},
+		shadowRadius: 10,
+		shadowOpacity: 0.35,
+		color: 'black',
+		justifyContent: 'center',
 	},
 	optionTitle: {
 		textAlign: 'center',
