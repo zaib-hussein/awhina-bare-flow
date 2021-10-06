@@ -172,12 +172,12 @@ export default function Login({navigation}) {
             {data.secureTextEntry ?
                             <Feather
                               name="eye-off"
-                              color="grey"
+                              color="salmon"
                               size={20}
                             /> :
                             <Feather
                               name="eye"
-                              color="grey"
+                              color="crimson"
                               size={20}
                             />
             }
