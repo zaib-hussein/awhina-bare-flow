@@ -11,7 +11,7 @@ const emergencyOptions = [
 	{type: '', isHelp: true},
 ];
 
-export default function EmergencyGive() {
+export default function EmergencyHelp() {
 	const renderItem = ({item}) => (
 		<EmergencyOption type={item.type} isHelp={item.isHelp} />
 	);

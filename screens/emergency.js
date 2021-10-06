@@ -7,9 +7,11 @@ import {
 	Image,
 	ScrollView,
 	StatusBar,
+	SafeAreaView,
 } from 'react-native';
-import {flex} from 'styled-system';
+import * as Animatable from 'react-native-animatable';
 import EmergencyGive from './emergency-give';
+import EmergencyHelp from './emergency-help';
 
 export default function Emergency() {
 	const [selected, setSelected] = useState('');
@@ -39,9 +41,21 @@ export default function Emergency() {
 				<Text style={styles.text_header}>{selected}</Text>
 			</View>
 			<ScrollView>
-				<View style={styles.container}>
-					<EmergencyGive />
-				</View>
+				{selected === 'Give' ? (
+					<Animatable.View
+						style={styles.container}
+						animation='fadeInLeft'
+						duration={500}>
+						<EmergencyGive />
+					</Animatable.View>
+				) : selected === 'Help' ? (
+					<Animatable.View
+						style={styles.container}
+						animation='fadeInRight'
+						duration={500}>
+						<EmergencyHelp />
+					</Animatable.View>
+				) : null}
 			</ScrollView>
 			<View
 				style={{
@@ -52,15 +66,15 @@ export default function Emergency() {
 					marginBottom: 20,
 				}}>
 				<TouchableOpacity
-					onPress={() => handleSelected('Give')}
-					style={styles.giveButton}>
-					<Text style={styles.giveText}>Give</Text>
-				</TouchableOpacity>
-
-				<TouchableOpacity
 					onPress={() => handleSelected('Help')}
 					style={styles.helpButton}>
 					<Text style={styles.helpText}>Help</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					onPress={() => handleSelected('Give')}
+					style={styles.giveButton}>
+					<Text style={styles.giveText}>Give</Text>
 				</TouchableOpacity>
 			</View>
 		</View>

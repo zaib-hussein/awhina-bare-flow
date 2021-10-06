@@ -45,7 +45,6 @@ export class EmergencyOption extends React.Component {
 				}
 				onPress={() => {
 					Alert.alert(
-                        {/* Functionality with Map Goes in here*/}
 						`${this.getIsHelpTitle()}`,
 						`You ${this.getIsHelp()} ${this.props.type}`
 					);
@@ -60,7 +59,7 @@ export class EmergencyOption extends React.Component {
 const styles = StyleSheet.create({
 	giveOption: {
 		display: 'flex',
-		backgroundColor: '#DE5050',
+		backgroundColor: '#50DE80',
 		borderRadius: 10,
 		padding: 10,
 		margin: 5,
@@ -73,7 +72,7 @@ const styles = StyleSheet.create({
 	},
 	helpOption: {
 		display: 'flex',
-		backgroundColor: '#50DE80',
+		backgroundColor: '#DE5050',
 		borderRadius: 10,
 		padding: 10,
 		margin: 5,
