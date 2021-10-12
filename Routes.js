@@ -18,7 +18,7 @@ const mainStack = () =>(
 <Stack.Screen name="Login" component={LoginScreen}
 options={{headerShown: false,}}
 />
-<Stack.Screen name="Register" component={RegisterScreen} />
+<Stack.Screen name="Register" component={RegisterScreen} options={{headerShown: false,}} />
 <Stack.Screen name="Splash" component={Splash} />
 
 </Stack.Navigator>
@@ -36,8 +36,8 @@ const secondStack = () => (
 
 function Routes() {
   return (
-    <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Splash">
+    <NavigationContainer >
+      <Drawer.Navigator initialRouteName="Splash" >
       <Drawer.Screen name="Login" component={mainStack} />
       <Drawer.Screen name="Home" component={secondStack} />
       <Drawer.Screen name="Tutorial" component={Tutorial} />

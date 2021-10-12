@@ -36,23 +36,34 @@ export default function Emergency() {
 	};
 
 	return (
-		<View>
-			<View style={styles.header}>
+		<View>{selected === 'Give' ? (
+			<Animatable.View
+				style={styles.header}
+				animation='fadeInRight'
+				duration={1000}>
 				<Text style={styles.text_header}>{selected}</Text>
-			</View>
+			</Animatable.View>
+		) : selected === 'Help' ? (
+			<Animatable.View
+				style={styles.header}
+				animation='fadeInLeft'
+				duration={800}>
+				<Text style={styles.text_header}>{selected}</Text>
+			</Animatable.View>
+		) : null}
 			<ScrollView>
 				{selected === 'Give' ? (
 					<Animatable.View
 						style={styles.container}
-						animation='fadeInLeft'
-						duration={500}>
+						animation='fadeInRight'
+						duration={1000}>
 						<EmergencyGive />
 					</Animatable.View>
 				) : selected === 'Help' ? (
 					<Animatable.View
 						style={styles.container}
-						animation='fadeInRight'
-						duration={500}>
+						animation='fadeInLeft'
+						duration={1000}>
 						<EmergencyHelp />
 					</Animatable.View>
 				) : null}
@@ -98,6 +109,7 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		backgroundColor: '#50DE80',
 		marginTop: 20,
+		marginBottom: 20,
 	},
 	giveText: {
 		justifyContent: 'center',
@@ -115,6 +127,7 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		backgroundColor: '#DE5050',
 		marginTop: 20,
+		marginBottom: 20,
 	},
 	helpText: {
 		justifyContent: 'center',
@@ -123,16 +136,14 @@ const styles = StyleSheet.create({
 		color: 'white',
 	},
 	header: {
-		marginTop: '40%',
+		marginTop: '35%',
 		flex: 1,
 		justifyContent: 'flex-end',
-		paddingHorizontal: 20,
-		paddingBottom: 50,
 	},
 	text_header: {
 		color: 'black',
 		fontWeight: 'bold',
-		fontSize: 96,
+		fontSize: 82,
 		textAlign: 'center',
 		textAlignVertical: 'bottom',
 	},
