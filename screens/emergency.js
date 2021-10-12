@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
 		// backgroundColor: '#ff4500', ///background color for contain.
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: 0,
+		marginTop: 40,	//bring help tions down on screen
 		width: '100%',
 		// height: 40,
 

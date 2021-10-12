@@ -4,6 +4,7 @@ import * as React from 'react';
 import {Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
+import LottieView from 'lottie-react-native';
 import SettingScreen from './setting';
 import EmergencyScreen from './emergency';
 import InboxScreen from './inbox';
@@ -62,7 +63,7 @@ function MyTabs() {
 		<Tab.Navigator
 			initialRouteName="Emergency"
 			tabBarOptions={{
-				activeTintColor: '#e91e63',
+			activeTintColor: '#e91e63',
 			}}
 		>
 			<Tab.Screen
@@ -70,8 +71,10 @@ function MyTabs() {
 				component={SettingScreen}
 				options={{
 					tabBarLabel: 'Setting',
-					tabBarIcon: ({color, size}) => (
-						<MaterialCommunityIcons name="cogs" color={color} size={size} />
+					tabBarIcon: ({color, size, focused}) => (
+						// <MaterialCommunityIcons name="cogs" color={color} size={size} />
+						<LottieView  source={require('./bottomIcons/setting.json')} autoPlay={focused} />
+
 					),
 				}}
 			/>
@@ -81,12 +84,14 @@ function MyTabs() {
 				component={InboxScreen}
 				options={{
 					tabBarLabel: 'Inbox',
-					tabBarIcon: ({color, size}) => (
-						<MaterialCommunityIcons
-							name="chat-outline"
-							color={color}
-							size={size}
-						/>
+					tabBarIcon: ({color, size, focused}) => (
+						// <MaterialCommunityIcons
+						// 	name="chat-outline"
+						// 	color={color}
+						// 	size={size}
+						// />
+						<LottieView  source={require('./bottomIcons/chat.json')} autoPlay={focused} />
+
 					),
 				}}
 			/>
@@ -96,12 +101,14 @@ function MyTabs() {
 				component={EmergencyScreen}
 				options={{
 					tabBarLabel: 'Emergency',
-					tabBarIcon: ({color, size}) => (
-						<MaterialCommunityIcons
-							name="alarm-light-outline"
-							color={color}
-							size={size}
-						/>
+					tabBarIcon: ({color, size, focused}) => (
+						// <MaterialCommunityIcons
+						// 	name="alarm-light-outline"
+						// 	color={color}
+						// 	size={size}
+						// />
+						<LottieView  source={require('./bottomIcons/emergency.json')} autoPlay={focused} />
+
 					),
 				}}
 			/>
@@ -110,9 +117,12 @@ function MyTabs() {
 				name="Map"
 				component={MapScreen}
 				options={{
+					headerShown: false,
 					tabBarLabel: 'Map',
-					tabBarIcon: ({color, size}) => (
-						<MaterialCommunityIcons name="map" color={color} size={size} />
+					tabBarIcon: ({color, size, focused}) => (
+						// <MaterialCommunityIcons name="map" color={color} size={size} />
+						<LottieView  source={require('./bottomIcons/area-map.json')} autoPlay={focused} />
+
 					),
 				}}
 			/>
@@ -122,8 +132,10 @@ function MyTabs() {
 				component={ProfileScreen}
 				options={{
 					tabBarLabel: 'Profile',
-					tabBarIcon: ({color, size}) => (
-						<MaterialCommunityIcons name="account" color={color} size={size} />
+					tabBarIcon: ({color, size, focused}) => (
+						// <MaterialCommunityIcons name="account" color={color} size={size} />
+						<LottieView  source={require('./bottomIcons/profile.json')} autoPlay={focused} />
+
 					),
 				}}
 			/>
