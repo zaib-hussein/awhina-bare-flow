@@ -70,7 +70,7 @@ export default function Setting({navigation}) {
                   color='red'
                   onPress={() => navigation.navigate('Tutorial')} />
             <ListItem.Title>Help</ListItem.Title>
-                <ListItem.Subtitle>Click to View Tutorial</ListItem.Subtitle>
+                <ListItem.Subtitle>  click icon to view tutorial</ListItem.Subtitle>
           </ListItem>
 
             <Divider orientation="horizontal" paddingTop={2}/>

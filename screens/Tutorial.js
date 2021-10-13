@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, Image } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
+import { marginTop } from 'styled-system';
 
 
 const Tutorial = ({navigation}) => {
