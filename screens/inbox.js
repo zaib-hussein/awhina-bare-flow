@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect, useCallback } from 'react';
 import { View, Text, Image } from 'react-native';
-//this is just a sample of other users message
-//import initialMessages from './messages';
+import {launchImageLibrary} from 'react-native-image-picker';
+// import initialMessages from './messages';
 import { GiftedChat,
          InputToolbar,
          Actions,
@@ -15,50 +15,93 @@ import { GiftedChat,
 } from 'react-native-gifted-chat';
 import { db, auth } from '../firebase/firebaseconfig';
 
+function openImageGallery() {
+  let options = {
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
+  };
+  launchImageLibrary(options, (response) => {
+    console.log('Response = ', response);
+
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('ImagePicker Error: ', response.error);
+    } else if (response.customButton) {
+      console.log('User tapped custom button: ', response.customButton);
+      alert(response.customButton);
+    } else {
+      const source = { uri: response.uri };
+      console.log('response', JSON.stringify(response));
+      this.setState({
+        filePath: response,
+        fileData: response.data,
+        fileUri: response.uri
+      });
+    }
+  });
+
+}
+
 export default function inbox() {
     const [text, setText] = useState('');
     const [messages, setMessages] = useState([]);
+    const [username, setUsername] = useState([]);
 
-    // useLayoutEffect(() => {
-    //   const unsubscribe = db.collection('chats').orderBy('createdAt', 
-    //   'desc').onSnapshot(snapshot=>setMessages(
-    //     snapshot.docs.map(doc=>({
-    //       _id: doc.data()._id,
-    //       createdAt: doc.data().createdAt.toDate(),
-    //       text: doc.data().text,
-    //       user: doc.data().user
-    //     }))
-    //   ))
-    //   return unsubscribe;
-    // }, [])
+    // useEffect(() => {
+    //   setMessages(initialMessages.reverse());
+    // }, []);
+
+    useLayoutEffect(() => {
+      const unsubscribe = db.collection('chats').orderBy('createdAt', 
+      'desc').onSnapshot(snapshot=>setMessages(
+        snapshot.docs.map(doc=>({
+          _id: doc.data()._id,
+          createdAt: doc.data().createdAt.toDate(),
+          text: doc.data().text,
+          user: doc.data().user
+        }))
+      ))
+      return unsubscribe;
+    }, [])
   
     const onSend = (newMessages = []) => {
       setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages));
       const message = newMessages[0];
-      /*{
-        _id,
-        createdAt,
-        text,
-        user
-      } = newMessages[0];*/
       db.collection('chats').add(message);
     };
+
+    db.collection('users')
+    .doc(auth.currentUser.email)
+    .get()
+    .then((snapshot) => {
+      if(snapshot.exists)
+      { 
+        setUsername(snapshot.data());
+      }
+      else{  
+        console.log("No data found!");
+      }
+    })
   
     return (
       <GiftedChat
         messages={messages}
         text={text}
         onInputTextChanged={setText}
+        placeholder='Type your message here...'
         onSend={messages => onSend(messages)}
         user={{
           _id: '1',
-          name: auth?.currentUser?.displayName
-          //avatar: 'https://placeimg.com/150/150/any',
+          name: username.firstname,
+          avatar: 'https://placeimg.com/150/150/any'
         }}
         alignTop
         alwaysShowSend
         scrollToBottom
-        // showUserAvatar
+        showUserAvatar
         renderAvatarOnTop
         renderUsernameOnMessage
         bottomOffset={26}
@@ -67,7 +110,7 @@ export default function inbox() {
         renderActions={renderActions}
         renderComposer={renderComposer}
         renderSend={renderSend}
-        //renderAvatar={renderAvatar}
+        renderAvatar={renderAvatar}
         renderBubble={renderBubble}
         renderSystemMessage={renderSystemMessage}
         renderMessage={renderMessage}
@@ -75,7 +118,7 @@ export default function inbox() {
         // renderMessageImage
         renderCustomView={renderCustomView}
         isCustomViewBottom
-        messagesContainerStyle={{ backgroundColor: 'indigo' }}
+        messagesContainerStyle={{ backgroundColor: '#848482' }}
         parsePatterns={(linkStyle) => [
           {
             pattern: /#(\w+)/,
@@ -113,13 +156,12 @@ export default function inbox() {
       icon={() => (
         <Image
           style={{ width: 32, height: 32 }}
-          source={{
-            uri: 'https://placeimg.com/32/32/any',
-          }}
+          source={require('./icons/galleryButton.png')}
         />
       )}
       options={{
         'Choose From Library': () => {
+          //openImageGallery()
           console.log('Choose From Library');
         },
         Cancel: () => {
@@ -160,20 +202,18 @@ export default function inbox() {
     >
       <Image
         style={{ width: 32, height: 32 }}
-        source={{
-          uri: 'https://placeimg.com/32/32/any',
-        }}
+        source={require('./icons/sendButton.png')}
       />
     </Send>
   );
 
-//   const renderAvatar = (props) => (
-//   <Avatar
-//     {...props}
-//     containerStyle={{ left: { borderWidth: 3, borderColor: 'red' }, right: {} }}
-//     imageStyle={{ left: { borderWidth: 3, borderColor: 'blue' }, right: {} }}
-//   />
-// );
+  const renderAvatar = (props) => (
+  <Avatar
+    {...props}
+    containerStyle={{ left: { borderWidth: 3, borderColor: 'red' }, right: {} }}
+    imageStyle={{ left: { borderWidth: 3, borderColor: 'blue' }, right: {} }}
+  />
+);
 
 const renderBubble = (props) => (
   <Bubble
@@ -181,7 +221,7 @@ const renderBubble = (props) => (
     // renderTime={() => <Text>Time</Text>}
     // renderTicks={() => <Text>Ticks</Text>}
     containerStyle={{
-      left: { borderColor: 'indigo', borderWidth: 8 },
+      left: { borderColor: '#848482', borderWidth: 8 },
       right: {},
     }}
     wrapperStyle={{
@@ -189,11 +229,11 @@ const renderBubble = (props) => (
       right: {},
     }}
     bottomContainerStyle={{
-      left: { borderColor: 'indigo', borderWidth: 4 },
+      left: { borderColor: '#848482', borderWidth: 4 },
       right: {},
     }}
     tickStyle={{}}
-    usernameStyle={{ color: 'grey', fontWeight: '100' }}
+    usernameStyle={{ color: 'black', fontWeight: '100' }}
     containerToNextStyle={{
       left: { borderColor: 'grey', borderWidth: 4 },
       right: {},
@@ -219,8 +259,8 @@ const renderMessage = (props) => (
     {...props}
     // renderDay={() => <Text>Date</Text>}
     containerStyle={{
-      left: { backgroundColor: 'indigo' },
-      right: { backgroundColor: 'indigo' },
+      left: { backgroundColor: '#848482' },
+      right: { backgroundColor: '#848482' },
     }}
   />
 );
