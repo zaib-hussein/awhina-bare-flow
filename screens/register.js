@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
 	View,
 	Text,
@@ -22,13 +22,12 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import validator from 'validator';
 
 export default function Register() {
-	const [firstName, setFirstName] = useState('');
-	const [lastName, setLastName] = useState('');
-	const [tempPassword, setTempPassword] = useState('');
-	const [password, setPassword] = useState('');
-	const [email, setEmail] = useState('');
-	const [phone, setPhone] = useState('+64');
-	const [DOB, setDOB] = useState('');
+	const [firstName, setFirstName] = useState(() => '');
+	const [lastName, setLastName] = useState(() => '');
+	const [password, setPassword] = useState(() => '');
+	const [email, setEmail] = useState(() => '');
+	const [phone, setPhone] = useState(() => '+64');
+	const [DOB, setDOB] = useState(() => '');
 	const [isFirstName, setIsFirstName] = useState(true);
 	const [isLastName, setIsLastName] = useState(true);
 	const [isEmail, setIsEmail] = useState(true);
@@ -37,15 +36,14 @@ export default function Register() {
 	const [isPassword, setIsPassword] = useState(true);
 	const [hideDOBPicker, setHideDOBPicker] = useState(true);
 	const [hidePassword, setHidePassword] = useState(true);
-	const [hideTempPassword, setHideTempPassword] = useState(true);
-
+	
 	//Uses the validator to validate user inputs
 	function validateInput() {
 		setIsFirstName(validator.isAlpha(firstName));
 		setIsLastName(validator.isAlpha(lastName));
 		setIsEmail(validator.isEmail(email));
 		setIsDOB(validator.isDate(DOB));
-		setIsPhone(validator.isMobilePhone(phone));
+		setIsPhone();
 		setIsPassword(password.length >= 6);
 	}
 
@@ -56,10 +54,6 @@ export default function Register() {
 		setTimeout(() => {
 			setLoading(false);
 		}, 1800);
-	};
-
-	const convertDOBToString = date => {
-		return date.toString().slice(3, 15);
 	};
 
 	//Sign up user to firebase auth
@@ -131,9 +125,9 @@ export default function Register() {
 					<Text style={styles.text_footer}>
 						First Name
 						{isFirstName ? null : (
-							<Animatable.View animation='fadeInLeft' duration={500}>
+							<Animatable.View animation='fadeInRight' duration={500}>
 								<Text style={styles.errorText}>
-									Your first name must be 4 characters long
+									Please enter your first name
 								</Text>
 							</Animatable.View>
 						)}
@@ -144,16 +138,23 @@ export default function Register() {
 							placeholder='First Name'
 							style={styles.textInput}
 							autoCapitalize='none'
-							onChangeText={text => setFirstName(text)}
+							onChangeText={text =>
+								validator.isAlpha(text)
+									? () => {
+											setFirstName(text);
+											setIsFirstName(true);
+									  }
+									: setIsFirstName(false)
+							}
 						/>
 					</KeyboardAvoidingView>
 
 					<Text style={styles.text_footer}>
 						Last Name
 						{isLastName ? null : (
-							<Animatable.View animation='fadeInLeft' duration={500}>
+							<Animatable.View animation='fadeInRight' duration={500}>
 								<Text style={styles.errorText}>
-									Your last name must be 4 characters long
+									Please enter your last name
 								</Text>
 							</Animatable.View>
 						)}
@@ -164,14 +165,21 @@ export default function Register() {
 							placeholder='Last Name'
 							style={styles.textInput}
 							autoCapitalize='none'
-							onChangeText={text => setLastName(text)}
+							onChangeText={text =>
+								validator.isAlpha(text)
+									? () => {
+											setLastName(text);
+											setIsLastName(true);
+									  }
+									: setIsLastName(false)
+							}
 						/>
 					</KeyboardAvoidingView>
 
 					<Text style={styles.text_footer}>
 						Email
 						{isEmail ? null : (
-							<Animatable.View animation='fadeInLeft' duration={500}>
+							<Animatable.View animation='fadeInRight' duration={500}>
 								<Text style={styles.errorText}>
 									Please enter your email
 								</Text>
@@ -184,17 +192,24 @@ export default function Register() {
 							placeholder='example@email.com'
 							style={styles.textInput}
 							autoCapitalize='none'
-							onChangeText={text => setEmail(text)}
+							onChangeText={text =>
+								validator.isEmail(text)
+									? setEmail(text)
+									: setIsEmail(false)
+							}
 						/>
 					</KeyboardAvoidingView>
 
-					<Text style={styles.text_footer}>Date of Birth{isDOB ? null : (
+					<Text style={styles.text_footer}>
+						Date of Birth
+						{isDOB ? null : (
 							<Animatable.View animation='fadeInRight' duration={500}>
 								<Text style={styles.errorText}>
 									Please enter your date of birth
 								</Text>
 							</Animatable.View>
-						)}</Text>
+						)}
+					</Text>
 					<KeyboardAvoidingView behavior={'height'} style={styles.action}>
 						<FontAwesome name='calendar' color='#05375a' size={20} />
 						<TextInput
@@ -213,8 +228,20 @@ export default function Register() {
 							mode='date'
 							color='crimson'
 							onConfirm={date => {
-								setDOB(convertDOBToString(date));
-								setHideDOBPicker(true);
+								date > new Date()
+									? () => {
+											setDOB('');
+											setIsDOB(true);
+											setHideDOBPicker(true);
+									  }
+									: () => {
+											setDOB(
+												date.toLocaleDateString(
+													'en-NZ'
+												)
+											);
+											setHideDOBPicker(true);
+									  };
 							}}
 							onCancel={() => setHideDOBPicker(true)}
 						/>
@@ -223,9 +250,9 @@ export default function Register() {
 					<Text style={styles.text_footer}>
 						Phone Number
 						{isPhone ? null : (
-							<Animatable.View animation='fadeInLeft' duration={500}>
+							<Animatable.View animation='fadeInRight' duration={500}>
 								<Text style={styles.errorText}>
-									Please enter your phone number
+									Please enter a NZ phone number
 								</Text>
 							</Animatable.View>
 						)}
@@ -237,7 +264,14 @@ export default function Register() {
 							style={styles.textInput}
 							maxLength={12}
 							keyboardType='numeric'
-							onChangeText={text => setPhone(text)}
+							onChangeText={text => {
+								validator.isNumeric(text) && text.length >= 8
+									? () => {
+											setPhone(text);
+											setIsPhone(true);
+									  }
+									: setIsPhone(false);
+							}}
 						/>
 					</KeyboardAvoidingView>
 
@@ -255,19 +289,24 @@ export default function Register() {
 						<Feather name='key' color='#05375a' size={20} />
 						<TextInput
 							placeholder='Enter Password'
-							secureTextEntry={hideTempPassword}
+							secureTextEntry={hidePassword}
 							style={styles.textInput}
 							autoCapitalize='none'
-							onChangeText={text => setTempPassword(text)}
+							onChangeText={text => {
+								text.length >= 6
+									? () => {
+											setPassword(text);
+											setIsPassword(true);
+									  }
+									: () => setIsPassword(false);
+							}}
 						/>
 
 						<TouchableOpacity
 							onPress={() =>
-								setHideTempPassword(
-									prevHideTempPassword => !prevHideTempPassword
-								)
+								setHidePassword(prevHidePassword => !prevHidePassword)
 							}>
-							{hideTempPassword ? (
+							{hidePassword ? (
 								<Feather name='eye-off' color='salmon' size={20} />
 							) : (
 								<Feather name='eye' color='red' size={20} />
@@ -400,6 +439,7 @@ const styles = StyleSheet.create({
 	errorMsg: {
 		color: '#FF0000',
 		fontSize: 14,
+		textAlignVertical: 'bottom',
 	},
 	button: {
 		alignItems: 'center',
