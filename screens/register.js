@@ -44,7 +44,7 @@ export default function Register() {
 		setIsFirstName(validator.isAlpha(firstName));
 		setIsLastName(validator.isAlpha(lastName));
 		setIsEmail(validator.isEmail(email));
-		setIsDOB(validator.isDate(DOB));
+		setIsDOB(validator.isDate(new Date(DOB)));
 		setIsPhone(validator.isMobilePhone(phone));
 		setIsPassword(password.length >= 6);
 	}
@@ -110,6 +110,55 @@ export default function Register() {
 			});
 	}
 
+	//Validates password
+	const handlePassword = password => {
+		if (password.length >= 6) {
+			setPassword(password);
+			setIsPassword(true);
+		} else {
+			setIsPassword(false);
+		}
+	};
+
+	//Validates email
+	const handleEmail = email => {
+		if (validator.isEmail(email)) {
+			setEmail(email);
+			setIsEmail(true);
+		} else {
+			setIsEmail(false);
+		}
+	};
+
+	//Validates phone
+	const handlePhone = phone => {
+		if (phone.length >= 8) {
+			setPhone(phone);
+			setIsPhone(true);
+		} else {
+			setIsPhone(false);
+		}
+	};
+	//Validates date of birth
+	const handleDOB = date => {
+		if (date < new Date()) {
+			setDOB(date.toLocaleDateString('en-NZ'));
+			setIsDOB(true);
+		} else {
+			setIsDOB(false);
+		}
+	};
+
+	//Validates both first and last names
+	const handleNames = (name, isFirst) => {
+		if (validator.isAlpha(name)) {
+			isFirst ? setFirstName(name) : setLastName(name);
+			isFirst ? setIsFirstName(true) : setIsLastName(true);
+		} else {
+			isFirst ? setIsFirstName(false) : setIsLastName(false);
+		}
+	};
+
 	return (
 		<View style={styles.container}>
 			<Spinner
@@ -133,7 +182,7 @@ export default function Register() {
 						{isFirstName ? null : (
 							<Animatable.View animation='fadeInRight' duration={500}>
 								<Text style={styles.errorText}>
-									Your first name must be 4 characters long
+									Please enter only letters
 								</Text>
 							</Animatable.View>
 						)}
@@ -144,7 +193,7 @@ export default function Register() {
 							placeholder='First Name'
 							style={styles.textInput}
 							autoCapitalize='none'
-							onChangeText={text => setFirstName(text)}
+							onChangeText={text => handleNames(text, true)}
 						/>
 					</View>
 
@@ -153,7 +202,7 @@ export default function Register() {
 						{isLastName ? null : (
 							<Animatable.View animation='fadeInRight' duration={500}>
 								<Text style={styles.errorText}>
-									Your last name must be 4 characters long
+									Please enter only letters
 								</Text>
 							</Animatable.View>
 						)}
@@ -164,7 +213,7 @@ export default function Register() {
 							placeholder='Last Name'
 							style={styles.textInput}
 							autoCapitalize='none'
-							onChangeText={text => setLastName(text)}
+							onChangeText={text => handleNames(text, false)}
 						/>
 					</View>
 
@@ -184,7 +233,7 @@ export default function Register() {
 							placeholder='example@email.com'
 							style={styles.textInput}
 							autoCapitalize='none'
-							onChangeText={text => setEmail(text)}
+							onChangeText={text => handleEmail(text)}
 						/>
 					</View>
 
@@ -216,7 +265,7 @@ export default function Register() {
 							mode='date'
 							color='crimson'
 							onConfirm={date => {
-								setDOB(convertDOBToString(date));
+								handleDOB(date);
 								setHideDOBPicker(true);
 							}}
 							onCancel={() => setHideDOBPicker(true)}
@@ -240,7 +289,7 @@ export default function Register() {
 							style={styles.textInput}
 							maxLength={12}
 							keyboardType='numeric'
-							onChangeText={text => setPhone(text)}
+							onChangeText={text => handlePhone(text)}
 						/>
 					</View>
 
@@ -261,7 +310,7 @@ export default function Register() {
 							secureTextEntry={hidePassword}
 							style={styles.textInput}
 							autoCapitalize='none'
-							onChangeText={text => console.log(text)}
+							onChangeText={text => handlePassword(text)}
 						/>
 
 						<TouchableOpacity
@@ -275,7 +324,15 @@ export default function Register() {
 							)}
 						</TouchableOpacity>
 					</View>
-
+					<View>
+						{isPassword ? null : (
+							<Animatable.View animation='fadeInRight' duration={500}>
+								<Text style={styles.errorText}>
+									Must be 6 characters or longer
+								</Text>
+							</Animatable.View>
+						)}
+					</View>
 					<View style={styles.button}>
 						<TouchableOpacity
 							onPress={() => {
