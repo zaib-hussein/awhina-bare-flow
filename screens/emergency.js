@@ -15,6 +15,7 @@ import EmergencyHelp from './emergency-help';
 
 export default function Emergency() {
 	const [selected, setSelected] = useState('');
+	const [freshLoad, setFreshLoad] = useState(true);
 	const [options, setOptions] = useState(() => [
 		{type: 'Water', isHelp: false},
 		{type: 'Food', isHelp: false},
@@ -36,21 +37,26 @@ export default function Emergency() {
 	};
 
 	return (
-		<View>{selected === 'Give' ? (
-			<Animatable.View
-				style={styles.header}
-				animation='fadeInRight'
-				duration={1000}>
-				<Text style={styles.text_header}>{selected}</Text>
-			</Animatable.View>
-		) : selected === 'Help' ? (
-			<Animatable.View
-				style={styles.header}
-				animation='fadeInLeft'
-				duration={800}>
-				<Text style={styles.text_header}>{selected}</Text>
-			</Animatable.View>
-		) : null}
+		<View>
+			{selected === 'Give' ? (
+				<TouchableOpacity onClick={() => setFreshLoad(true)}>
+					<Animatable.View
+						style={styles.header}
+						animation='fadeInRight'
+						duration={1000}>
+						<Text style={styles.text_header}>{selected}</Text>
+					</Animatable.View>
+				</TouchableOpacity>
+			) : selected === 'Help' ? (
+				<TouchableOpacity onClick={() => setFreshLoad(true)}>
+					<Animatable.View
+						style={styles.header}
+						animation='fadeInLeft'
+						duration={800}>
+						<Text style={styles.text_header}>{selected}</Text>
+					</Animatable.View>
+				</TouchableOpacity>
+			) : null}
 			<ScrollView>
 				{selected === 'Give' ? (
 					<Animatable.View
@@ -76,23 +82,51 @@ export default function Emergency() {
 					alignContent: 'flex-end',
 					marginBottom: 20,
 				}}>
-				<TouchableOpacity
-					onPress={() => handleSelected('Help')}
-					style={styles.helpButton}>
-					<Text style={styles.helpText}>Help</Text>
-				</TouchableOpacity>
+				{freshLoad === true ? (
+					<View style={styles.rows}>
+						<TouchableOpacity
+							onPress={() => {
+								handleSelected('Help');
+								setFreshLoad(false);
+							}}
+							style={styles.helpButtonLarge}>
+							<Text style={styles.helpTextLarge}>Help</Text>
+						</TouchableOpacity>
 
-				<TouchableOpacity
-					onPress={() => handleSelected('Give')}
-					style={styles.giveButton}>
-					<Text style={styles.giveText}>Give</Text>
-				</TouchableOpacity>
+						<TouchableOpacity
+							onPress={() => {
+								handleSelected('Give');
+								setFreshLoad(false);
+							}}
+							style={styles.giveButtonLarge}>
+							<Text style={styles.giveTextLarge}>Give</Text>
+						</TouchableOpacity>
+					</View>
+				) : (
+					<>
+						<TouchableOpacity
+							onPress={() => handleSelected('Help')}
+							style={styles.helpButton}>
+							<Text style={styles.helpText}>Help</Text>
+						</TouchableOpacity>
+
+						<TouchableOpacity
+							onPress={() => handleSelected('Give')}
+							style={styles.giveButton}>
+							<Text style={styles.giveText}>Give</Text>
+						</TouchableOpacity>
+					</>
+				)}
 			</View>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
+	rows: {
+		display: 'flex',
+		flexDirection: 'column',
+	},
 	container: {
 		flex: 1,
 		alignItems: 'center',
@@ -108,7 +142,18 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		borderWidth: 1,
 		backgroundColor: '#50DE80',
-		marginTop: 20,
+		marginTop: 5,
+		marginBottom: 30,
+	},
+	giveButtonLarge: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 10,
+		borderWidth: 1,
+		backgroundColor: '#50DE80',
+		padding: 10,
+		marginTop: 70,
+		minWidth: '35%',
 		marginBottom: 20,
 	},
 	giveText: {
@@ -116,6 +161,13 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		textAlignVertical: 'center',
 		color: 'black',
+	},
+	giveTextLarge: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		textAlignVertical: 'center',
+		color: 'black',
+		fontSize: 80,
 	},
 	helpButton: {
 		display: 'flex',
@@ -126,7 +178,18 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		borderWidth: 1,
 		backgroundColor: '#DE5050',
-		marginTop: 20,
+		marginTop: 5,
+		marginBottom: 30,
+	},
+	helpButtonLarge: {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 10,
+		borderWidth: 1,
+		backgroundColor: '#DE5050',
+		padding: 10,
+		marginTop: 200,
 		marginBottom: 20,
 	},
 	helpText: {
@@ -134,6 +197,13 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		textAlignVertical: 'center',
 		color: 'white',
+	},
+	helpTextLarge: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		textAlignVertical: 'center',
+		color: 'white',
+		fontSize: 80,
 	},
 	header: {
 		marginTop: '35%',
