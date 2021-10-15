@@ -64,7 +64,6 @@ export default function Login({navigation}) {
 
 	const goToRegisterScreen = () => {
 		navigation.navigate('Register');
-		console.log(firebase);
 	};
 
 	const goToHomeScreen = () => {

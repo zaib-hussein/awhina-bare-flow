@@ -126,19 +126,19 @@ export default function Register() {
 				<Text style={styles.text_header}>User Registeration</Text>
 			</View>
 
-			<KeyboardAvoidingView behavior={'padding'} style={styles.footer}>
+			<View behavior={'padding'} style={styles.footer}>
 				<Animatable.View animation='slideInUp'>
-					<Text style={styles.text_footer}>
+					<Text style={styles.text_footer_first}>
 						First Name
 						{isFirstName ? null : (
-							<Animatable.View animation='fadeInLeft' duration={500}>
+							<Animatable.View animation='fadeInRight' duration={500}>
 								<Text style={styles.errorText}>
 									Your first name must be 4 characters long
 								</Text>
 							</Animatable.View>
 						)}
 					</Text>
-					<KeyboardAvoidingView behavior={'height'} style={styles.action}>
+					<View style={styles.action}>
 						<FontAwesome name='user-o' color='#05375a' size={20} />
 						<TextInput
 							placeholder='First Name'
@@ -146,19 +146,19 @@ export default function Register() {
 							autoCapitalize='none'
 							onChangeText={text => setFirstName(text)}
 						/>
-					</KeyboardAvoidingView>
+					</View>
 
 					<Text style={styles.text_footer}>
 						Last Name
 						{isLastName ? null : (
-							<Animatable.View animation='fadeInLeft' duration={500}>
+							<Animatable.View animation='fadeInRight' duration={500}>
 								<Text style={styles.errorText}>
 									Your last name must be 4 characters long
 								</Text>
 							</Animatable.View>
 						)}
 					</Text>
-					<KeyboardAvoidingView behavior={'height'} style={styles.action}>
+					<View style={styles.action}>
 						<FontAwesome name='user' color='#05375a' size={24} />
 						<TextInput
 							placeholder='Last Name'
@@ -166,19 +166,19 @@ export default function Register() {
 							autoCapitalize='none'
 							onChangeText={text => setLastName(text)}
 						/>
-					</KeyboardAvoidingView>
+					</View>
 
 					<Text style={styles.text_footer}>
 						Email
 						{isEmail ? null : (
-							<Animatable.View animation='fadeInLeft' duration={500}>
+							<Animatable.View animation='fadeInRight' duration={500}>
 								<Text style={styles.errorText}>
 									Please enter your email
 								</Text>
 							</Animatable.View>
 						)}
 					</Text>
-					<KeyboardAvoidingView behavior={'height'} style={styles.action}>
+					<View style={styles.action}>
 						<FontAwesome name='envelope' color='#05375a' size={20} />
 						<TextInput
 							placeholder='example@email.com'
@@ -186,16 +186,19 @@ export default function Register() {
 							autoCapitalize='none'
 							onChangeText={text => setEmail(text)}
 						/>
-					</KeyboardAvoidingView>
+					</View>
 
-					<Text style={styles.text_footer}>Date of Birth{isDOB ? null : (
+					<Text style={styles.text_footer}>
+						Date of Birth
+						{isDOB ? null : (
 							<Animatable.View animation='fadeInRight' duration={500}>
 								<Text style={styles.errorText}>
 									Please enter your date of birth
 								</Text>
 							</Animatable.View>
-						)}</Text>
-					<KeyboardAvoidingView behavior={'height'} style={styles.action}>
+						)}
+					</Text>
+					<View style={styles.action}>
 						<FontAwesome name='calendar' color='#05375a' size={20} />
 						<TextInput
 							placeholder='Enter Date of Birth'
@@ -218,19 +221,19 @@ export default function Register() {
 							}}
 							onCancel={() => setHideDOBPicker(true)}
 						/>
-					</KeyboardAvoidingView>
+					</View>
 
 					<Text style={styles.text_footer}>
 						Phone Number
 						{isPhone ? null : (
-							<Animatable.View animation='fadeInLeft' duration={500}>
+							<Animatable.View animation='fadeInRight' duration={500}>
 								<Text style={styles.errorText}>
 									Please enter your phone number
 								</Text>
 							</Animatable.View>
 						)}
 					</Text>
-					<KeyboardAvoidingView behavior={'height'} style={styles.action}>
+					<View style={styles.action}>
 						<FontAwesome name='phone' color='#05375a' size={20} />
 						<TextInput
 							placeholder='xxx xxx xxxx'
@@ -239,7 +242,7 @@ export default function Register() {
 							keyboardType='numeric'
 							onChangeText={text => setPhone(text)}
 						/>
-					</KeyboardAvoidingView>
+					</View>
 
 					<Text style={styles.text_footer}>
 						Password
@@ -251,29 +254,27 @@ export default function Register() {
 							</Animatable.View>
 						)}
 					</Text>
-					<KeyboardAvoidingView behavior={'height'} style={styles.action}>
+					<View style={styles.action}>
 						<Feather name='key' color='#05375a' size={20} />
 						<TextInput
 							placeholder='Enter Password'
-							secureTextEntry={hideTempPassword}
+							secureTextEntry={hidePassword}
 							style={styles.textInput}
 							autoCapitalize='none'
-							onChangeText={text => setTempPassword(text)}
+							onChangeText={text => console.log(text)}
 						/>
 
 						<TouchableOpacity
 							onPress={() =>
-								setHideTempPassword(
-									prevHideTempPassword => !prevHideTempPassword
-								)
+								setHidePassword(prevHidePassword => !prevHidePassword)
 							}>
-							{hideTempPassword ? (
+							{hidePassword ? (
 								<Feather name='eye-off' color='salmon' size={20} />
 							) : (
 								<Feather name='eye' color='red' size={20} />
 							)}
 						</TouchableOpacity>
-					</KeyboardAvoidingView>
+					</View>
 
 					<View style={styles.button}>
 						<TouchableOpacity
@@ -339,7 +340,7 @@ export default function Register() {
 						</TouchableOpacity>
 					</View>
 				</Animatable.View>
-			</KeyboardAvoidingView>
+			</View>
 		</View>
 	);
 }
@@ -362,7 +363,7 @@ const styles = StyleSheet.create({
 		borderTopLeftRadius: 30,
 		borderTopRightRadius: 30,
 		paddingHorizontal: 20,
-		paddingVertical: 25,
+		paddingVertical: 10,
 	},
 	text_header: {
 		color: '#fff',
@@ -374,7 +375,12 @@ const styles = StyleSheet.create({
 		color: '#05375a',
 		fontSize: 17,
 		fontWeight: 'bold',
-		marginTop: 7,
+		marginTop: 5,
+	},
+	text_footer_first: {
+		color: '#05375a',
+		fontSize: 17,
+		fontWeight: 'bold',
 	},
 	action: {
 		flexDirection: 'row',
@@ -400,6 +406,7 @@ const styles = StyleSheet.create({
 	errorMsg: {
 		color: '#FF0000',
 		fontSize: 14,
+		textAlignVertical: 'bottom',
 	},
 	button: {
 		alignItems: 'center',
