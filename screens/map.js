@@ -1,99 +1,63 @@
 import { StyleSheet, Text,Platform,View} from 'react-native';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView,{Marker}from 'react-native-maps';
 import React, {Component} from 'react';
 import Geolocation from '@react-native-community/geolocation';
+import Polyline from '@mapbox/polyline';
+import MapViewDirections from 'react-native-maps-directions';
 
 
+const coordinates=[
+  {
+    latitude:-36.858755,
+    longitude:174.76163,
+  },
+  {
+    latitude:-36.717228,
+    longitude:174.714586,
+  },
+];
 
-export class Map extends Component {
+const GOOGLE_MAPS_APIKEY='AIzaSyC0SDraN_tbT6XX7Uxr4N_gkBgVsuWo-IY';
 
-  constructor(props){
-    super(props);
-    this.state={
-      latitude:0,
-      longitude:0,
-      latitudeDelta:0,
-      longitudeDelta:0
-    };
-  }
-  
-  componentDidMount(){
-    this.requestLocationPermission();
-  }
 
-  requestLocationPermission = async () => {
-    if(Platform.OS === 'ios'){
-      var response = await request (PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+class Map extends Component {
 
-      if (response === 'granted'){
-        this.locationCurrentPosition();
-      }
-      }
-      else{
-        var response = await request (PERMISSIONS.ANDROID.ACCESS_FIINE_LOCATION);
-        
-        if(response === 'granted'){
-          this.locationCurrentPosition();
-        }
-
-      }
-      
-    }
-  
-
-  locationCurrentPosition =()=>{
-    Geolocation.getCurrentPosition(
-      position => {
-        console.log(JSON.stringify(position));
-  
-        let initialPosition = {
-          latitude:position.latitude,
-          longitude:position.longitude,
-          latitudeDelta:0.0812,
-          longitudeDelta:0.0402
-        }
-        this.setState({initialPosition});
-      },
-    )
-  }
- 
-    render() {
-      return (
-          <MapView
-              ref = {map => this._map = map}
+  render(){
+    return (
+    <View style={styles.container}>
+      <MapView
+              
               showsUserLocation={true}
-              style={styles.map}
-              initialRegion={this.state.initialPosition
+              style={StyleSheet.absoluteFill}
+              initialRegion={coordinates[0]
+              }>
 
-                
-              }
-          ></MapView>
-      );
-    }
-  
-  }
+        <Marker 
+        coordinates={coordinates[0]} 
+        />
+        <Marker 
+        coordinates={coordinates[1]} 
+        title={"Volunteer"}
+        />
+        <MapViewDirections 
+          origin={coordinates[0]}
+          destination={coordinates[1]}
+          apikey={GOOGLE_MAPS_APIKEY}
+          strokeWidth={3}
+          strokeColor="hotpink"
+          />
 
+      </MapView>
+      </View>
+    )
+  };
+};
+    
   
 
   const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  map: {
-    // ...StyleSheet.absoluteFillObject
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    //   width: Dimensions.get('window').width,
-    //   height: 500,
+      flex:1,
   },
 });
 export default Map;
