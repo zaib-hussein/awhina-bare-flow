@@ -16,10 +16,11 @@ const map = () => {
       longitude:174.714586,
       latitudeDelta:0.0922,
       longitudeDelta:0.0421,
-    }
+    } 
   })
 const mapRef= useRef()
-const {userLocation,voluneerLocation} = state
+
+const {userLocation,voluneerLocation} = state;
 
 const GOOGLE_MAPS_APIKEY='AIzaSyC0SDraN_tbT6XX7Uxr4N_gkBgVsuWo-IY';
 
@@ -28,15 +29,13 @@ const GOOGLE_MAPS_APIKEY='AIzaSyC0SDraN_tbT6XX7Uxr4N_gkBgVsuWo-IY';
       <MapView
       ref={mapRef}
       showsUserLocation={true}
+      showsCompass={true}
       style={StyleSheet.absoluteFill}
       initialRegion={userLocation}
       >
 
         <Marker 
-        coordinates={userLocation} 
-        />
-        <Marker 
-        coordinates={voluneerLocation} 
+        coordinate={voluneerLocation} 
         title={"Volunteer"}
         />
         <MapViewDirections 
@@ -60,7 +59,7 @@ const GOOGLE_MAPS_APIKEY='AIzaSyC0SDraN_tbT6XX7Uxr4N_gkBgVsuWo-IY';
 
       </MapView>
       </View>
-    )
+    );
   };
 
     
