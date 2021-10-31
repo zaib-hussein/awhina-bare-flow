@@ -15,10 +15,9 @@ const firebaseConfig = {
 };
 
 let app;
-if(firebase.apps.length === 0){
+if(firebase.apps.length <= 0){
 	app = firebase.initializeApp(firebaseConfig);
 }
-
 else{
 	app = firebase.app()
 }
@@ -49,6 +48,7 @@ export function loginUser() {
 		.then((userCredential) => {
 			//Logged in
 			var user = userCredential.user;
+			user.displayName("firstname");
 		})
 		.catch((error) => {
 			//Not Logged In

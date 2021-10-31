@@ -1,400 +1,486 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
-import DateTimePicker from 'react-native-modal-datetime-picker';
+import React, {useState} from 'react';
+import {
+	View,
+	Text,
+	TouchableOpacity,
+	TextInput,
+	Platform,
+	StyleSheet,
+	StatusBar,
+	Keyboard,
+	KeyboardAvoidingView,
+	Dimensions,
+	Button,
+	ToastAndroid,
+	Alert,
+} from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
+import {db, auth} from '../firebase/firebaseconfig';
+import Spinner from 'react-native-loading-spinner-overlay';
+import validator from 'validator';
 
 export default function Register() {
-	const [data, setData] = React.useState({
-		firstName: '',
-		lastName: '',
-		email: '',
-		phone: 0,
-		password: '',
-		confirmPassword: '',
-		check_textInputChange: false,
-		isValidFirstName: true,
-		isValidLastName: true,
-		isValidEmail: true,
-		isValidPhone: true,
-		isValidPassword: true,
-		isValidConfirmPassword: true,
-	});
-	const [checkDate, setDate] = useState(false);
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
+	const [tempPassword, setTempPassword] = useState('');
+	const [password, setPassword] = useState('');
+	const [email, setEmail] = useState('');
+	const [phone, setPhone] = useState('+64');
+	const [DOB, setDOB] = useState('');
+	const [isFirstName, setIsFirstName] = useState(true);
+	const [isLastName, setIsLastName] = useState(true);
+	const [isEmail, setIsEmail] = useState(true);
+	const [isDOB, setIsDOB] = useState(true);
+	const [isPhone, setIsPhone] = useState(true);
+	const [isPassword, setIsPassword] = useState(true);
+	const [hideDOBPicker, setHideDOBPicker] = useState(true);
+	const [hidePassword, setHidePassword] = useState(true);
+	const [hideTempPassword, setHideTempPassword] = useState(true);
 
-	//Check whether the username has more than equal to 4 characters long.
-	//Also store the 'val' into the 'username' value
-	const textFirstNameChange = (firstName_Val) => {
-		if (firstName_Val.trim().length >= 4) {
-			setData({
-				...data,
-				firstName: firstName_Val,
-				check_textInputChange: true,
-				isValidFirstName: true,
+	//Uses the validator to validate user inputs
+	function validateInput() {
+		setIsFirstName(validator.isAlpha(firstName));
+		setIsLastName(validator.isAlpha(lastName));
+		setIsEmail(validator.isEmail(email));
+		setIsDOB(validator.isDate(new Date(DOB)));
+		setIsPhone(validator.isMobilePhone(phone));
+		setIsPassword(password.length >= 6);
+	}
+
+	//Show activity spinner
+	const [loading, setLoading] = useState(false);
+	const startLoading = () => {
+		setLoading(true);
+		setTimeout(() => {
+			setLoading(false);
+		}, 1800);
+	};
+
+	const convertDOBToString = date => {
+		return date.toString().slice(3, 15);
+	};
+
+	//Sign up user to firebase auth
+	function signUpNewUser() {
+		auth.createUserWithEmailAndPassword(email, password)
+			.then(user => {
+				console.log('User account created & signed in!');
+				writeUserData(user.user.uid);
+			})
+			.catch(error => {
+				if (error.code === 'auth/email-already-in-use') {
+					console.log('That email address is already in use!');
+				}
+				if (error.code === 'auth/invalid-email') {
+					console.log('That email address is invalid!');
+				}
+				console.error(error + ' ' + email + ' ' + firstName + ' ' + lastName);
 			});
+	}
+
+	//Save user details to firebase db
+	function writeUserData(userId) {
+		db.collection('chats')
+			.orderBy('createdAt', 'desc')
+			.get()
+			.then(snapshot => {
+				if (snapshot.exists) {
+					setMessage(snapshot.data());
+				} else {
+					console.log('No data found!');
+				}
+			});
+		db.collection('users/' + userId)
+			.set({
+				firstName: firstName,
+				lastName: lastName,
+				email: email,
+				phone: phone,
+				dob: DOB,
+			})
+			.then(() => {
+				// Data saved successfully!
+				console.log(`User ${userId} added to users collection successfully!`);
+			})
+			.catch(error => {
+				// The write failed...
+				console.log(`User ${userId} could not be added to users collection.` + error.message());
+			});
+	}
+
+	//Validates password
+	const handlePassword = password => {
+		if (password.length >= 6) {
+			setPassword(password);
+			setIsPassword(true);
 		} else {
-			setData({
-				...data,
-				check_textInputChange: false,
-				isValidFirstName: false,
-			});
+			setIsPassword(false);
 		}
 	};
 
-	//Check if the 'username' is null. If the 'username' is null, then it will display an error.
-	const handleValidFirstName = (firstName_Val) => {
-		if (firstName_Val.trim().length >= 4) {
-			setData({
-				...data,
-				isValidFirstName: true,
-			});
+	//Validates email
+	const handleEmail = email => {
+		if (validator.isEmail(email)) {
+			setEmail(email);
+			setIsEmail(true);
 		} else {
-			setData({
-				...data,
-				isValidFirstName: false,
-			});
+			setIsEmail(false);
 		}
 	};
 
-	const textLastNamechange = (lastName_Val) => {
-		if (lastName_Val.trim().length >= 4) {
-			setData({
-				...data,
-				lastName: lastName_Val,
-				check_textInputChange: true,
-				isValidLastName: true,
-			});
+	//Validates phone
+	const handlePhone = phone => {
+		if (phone.length >= 8) {
+			setPhone(phone);
+			setIsPhone(true);
 		} else {
-			setData({
-				...data,
-				lastName: lastName_Val,
-				check_textInputChange: false,
-				isValidLastName: false,
-			});
+			setIsPhone(false);
+		}
+	};
+	//Validates date of birth
+	const handleDOB = date => {
+		if (date < new Date()) {
+			setDOB(date.toLocaleDateString('en-NZ'));
+			setIsDOB(true);
+		} else {
+			setIsDOB(false);
 		}
 	};
 
-	const handleValidLastName = (lastName_Val) => {
-		if (lastName_Val.trim().length >= 4) {
-			setData({
-				...data,
-				isValidLastName: true,
-			});
+	//Validates both first and last names
+	const handleNames = (name, isFirst) => {
+		if (validator.isAlpha(name)) {
+			isFirst ? setFirstName(name) : setLastName(name);
+			isFirst ? setIsFirstName(true) : setIsLastName(true);
 		} else {
-			setData({
-				...data,
-				isValidLastName: false,
-			});
+			isFirst ? setIsFirstName(false) : setIsLastName(false);
 		}
-	};
-
-	const textEmailChange = (email_Val) => {
-		if (email_Val.trim().length > 0) {
-			setData({
-				...data,
-				email: email_Val,
-				check_textInputChange: true,
-				isValidEmail: true,
-			});
-		} else {
-			setData({
-				...data,
-				email: email_Val,
-				check_textInputChange: false,
-				isValidEmail: false,
-			});
-		}
-	};
-
-	const handleValidEmail = (email_Val) => {
-		if (email_Val.trim().length > 0) {
-			setData({
-				...data,
-				isValidEmail: true,
-			});
-		} else {
-			setData({
-				...data,
-				isValidEmail: false,
-			});
-		}
-	};
-
-	const textPhoneChange = (phone_Val) => {
-		if (phone_Val > 0) {
-			setData({
-				...data,
-				phone: phone_Val,
-				check_textInputChange: true,
-				isValidPhone: true,
-			});
-		} else {
-			setData({
-				...data,
-				phone: phone_Val,
-				check_textInputChange: false,
-				isValidPhone: false,
-			});
-		}
-	};
-
-	const handleValidPhone = (phone_Val) => {
-		if (phone_Val > 0) {
-			setData({
-				...data,
-				isValidPhone: true,
-			});
-		} else {
-			setData({
-				...data,
-				isValidPhone: false,
-			});
-		}
-	};
-
-	//Check whether the 'password' has more than equal to 8 characters long.
-	//Also store the 'val1' into the 'password' value
-	const textPasswordChange = (password_Val) => {
-		if (password_Val.trim().length >= 8) {
-			setData({
-				...data,
-				password: password_Val,
-				check_textInputChange: true,
-				isValidPassword: true,
-			});
-		} else {
-			setData({
-				...data,
-				username: password_Val,
-				check_textInputChange: false,
-				isValidPassword: false,
-			});
-		}
-	};
-
-	//Check if the 'password' is null. If the 'password' is null, then it will display an error.
-	const handleValidPassword = (password_Val) => {
-		if (password_Val.trim().length >= 8) {
-			setData({
-				...data,
-				isValidPassword: true,
-			});
-		} else {
-			setData({
-				...data,
-				isValidPassword: false,
-			});
-		}
-	};
-
-	//Check whether the 'confirmPassword' is equal to 'password'.
-	//Also store the 'val2' into the 'confirmPassword' value
-	const textPasswordConfirmChange = (confirmPassword_Val) => {
-		if (confirmPassword_Val == data.password) {
-			setData({
-				...data,
-				confirmPassword: confirmPassword_Val,
-				check_textInputChange: true,
-				isValidConfirmPassword: true,
-			});
-		} else {
-			setData({
-				...data,
-				confirmPassword: confirmPassword_Val,
-				check_textInputChange: false,
-				isValidConfirmPassword: false,
-			});
-		}
-	};
-
-	//Check if the 'confirmPassword' is null. If the 'confirmPassword' is null, then it will display an error.
-	const handleValidConfirmPassword = (confirmPassword_Val) => {
-		if (confirmPassword_Val == data.password) {
-			setData({
-				...data,
-				isValidConfirmPassword: true,
-			});
-		} else {
-			setData({
-				...data,
-				isValidConfirmPassword: false,
-			});
-		}
-	};
-
-	//confirm button  when the calender is open
-	const showDatePicker = () => {
-		setDate(true);
-	};
-
-	//Cancel button when the calender is open
-	const hideDatePicker = () => {
-		setDate(false);
-	};
-
-	//Show the date of the user chosen
-	const handleConfirm = (date) => {
-		console.log('A date has been picked: ', date);
-		hideDatePicker();
 	};
 
 	return (
-		<View style={styles.login}>
-			<View>
-				<Text>Enter your First Name:</Text>
-				<TextInput
-					placeholder="First Name"
-					style={styles.textbox}
-					onChangeText={(firstName_Val) => textFirstNameChange(firstName_Val)}
-					onEndEditing={(e) => handleValidFirstName(e.nativeEvent.text)}
-				/>
+		<View style={styles.container}>
+			<Spinner
+				color='crimson'
+				animation='fade'
+				// set visibility of Spinner
+				visible={loading}
+				// text shown the Spinner
+				textContent={'Fetching data...'} // shown on overlay
+				// style of the Spinner text
+				textStyle={styles.spinnerTextStyle}
+			/>
+			<View style={styles.header}>
+				<Text style={styles.text_header}>User Registeration</Text>
 			</View>
 
-			{data.isValidFirstName ? null : (
-				<Animatable.View animation="fadeInLeft" duration={500}>
-					<Text style={styles.errorText}>
-						Your first name must be 4 characters long!
+			<View behavior={'padding'} style={styles.footer}>
+				<Animatable.View animation='slideInUp'>
+					<Text style={styles.text_footer_first}>
+						First Name
+						{isFirstName ? null : (
+							<Animatable.View animation='fadeInRight' duration={500}>
+								<Text style={styles.errorText}>
+									Please enter only letters
+								</Text>
+							</Animatable.View>
+						)}
 					</Text>
-				</Animatable.View>
-			)}
+					<View style={styles.action}>
+						<FontAwesome name='user-o' color='#05375a' size={20} />
+						<TextInput
+							placeholder='First Name'
+							style={styles.textInput}
+							autoCapitalize='none'
+							onChangeText={text => handleNames(text, true)}
+						/>
+					</View>
 
-			<View>
-				<Text>Enter your Last Name</Text>
-				<TextInput
-					placeholder="Last Name"
-					style={styles.textbox}
-					onChangeText={(lastName_Val) => textLastNamechange(lastName_Val)}
-					onEndEditing={(e) => handleValidLastName(e.nativeEvent.text)}
-				/>
-			</View>
-
-			{data.isValidLastName ? null : (
-				<Animatable.View animation="fadeInLeft" duration={500}>
-					<Text style={styles.errorText}>
-						Your last name must be 4 characters long!
+					<Text style={styles.text_footer}>
+						Last Name
+						{isLastName ? null : (
+							<Animatable.View animation='fadeInRight' duration={500}>
+								<Text style={styles.errorText}>
+									Please enter only letters
+								</Text>
+							</Animatable.View>
+						)}
 					</Text>
-				</Animatable.View>
-			)}
+					<View style={styles.action}>
+						<FontAwesome name='user' color='#05375a' size={24} />
+						<TextInput
+							placeholder='Last Name'
+							style={styles.textInput}
+							autoCapitalize='none'
+							onChangeText={text => handleNames(text, false)}
+						/>
+					</View>
 
-			<View>
-				<Text>Enter your Email:</Text>
-				<TextInput
-					placeholder="Example@gmail.com"
-					style={styles.textbox}
-					onChangeText={(email_Val) => textEmailChange(email_Val)}
-					onEndEditing={(e) => handleValidEmail(e.nativeEvent.text)}
-				/>
-			</View>
-
-			{data.isValidEmail ? null : (
-				<Animatable.View animation="fadeInLeft" duration={500}>
-					<Text style={styles.errorText}>
-						Please input your email!
+					<Text style={styles.text_footer}>
+						Email
+						{isEmail ? null : (
+							<Animatable.View animation='fadeInRight' duration={500}>
+								<Text style={styles.errorText}>
+									Please enter your email
+								</Text>
+							</Animatable.View>
+						)}
 					</Text>
-				</Animatable.View>
-			)}
+					<View style={styles.action}>
+						<FontAwesome name='envelope' color='#05375a' size={20} />
+						<TextInput
+							placeholder='example@email.com'
+							style={styles.textInput}
+							autoCapitalize='none'
+							onChangeText={text => handleEmail(text)}
+						/>
+					</View>
 
-			<View>
-				<Text>Enter your phone number:</Text>
-				<TextInput
-					placeholder="Phone Number"
-					style={styles.textbox}
-					maxLength={12}
-					keyboardType='numeric'
-					onChangeText={(phone_Val) => textPhoneChange(phone_Val)}
-					onEndEditing={(e) => handleValidPhone(e.nativeEvent.text)}
-				/>
-			</View>
-
-			{data.isValidPhone ? null : (
-				<Animatable.View animation="fadeInLeft" duration={500}>
-					<Text style={styles.errorText}>
-						Please input your phone number!
+					<Text style={styles.text_footer}>
+						Date of Birth
+						{isDOB ? null : (
+							<Animatable.View animation='fadeInRight' duration={500}>
+								<Text style={styles.errorText}>
+									Please enter your date of birth
+								</Text>
+							</Animatable.View>
+						)}
 					</Text>
-				</Animatable.View>
-			)}
+					<View style={styles.action}>
+						<FontAwesome name='calendar' color='#05375a' size={20} />
+						<TextInput
+							placeholder='Enter Date of Birth'
+							value={DOB.toString()}
+							style={styles.textInput}
+							onFocus={() => {
+								Keyboard.dismiss();
+								setHideDOBPicker(
+									prevHideDOBPicker => !prevHideDOBPicker
+								);
+							}}
+						/>
+						<DateTimePicker
+							isVisible={!hideDOBPicker}
+							mode='date'
+							color='crimson'
+							onConfirm={date => {
+								handleDOB(date);
+								setHideDOBPicker(true);
+							}}
+							onCancel={() => setHideDOBPicker(true)}
+						/>
+					</View>
 
-			<View>
-				<Text>Enter your Date of Birth:</Text>
-				<Button title="Date" onPress={showDatePicker} />
-				<DateTimePicker
-					isVisible={checkDate}
-					mode="date"
-					onConfirm={handleConfirm}
-					onCancel={hideDatePicker}
-				/>
-			</View>
-
-			<View>
-				<Text>Enter your Password:</Text>
-				<TextInput
-					placeholder="Password"
-					style={styles.textbox}
-					secureTextEntry={true}
-					onChangeText={(password_Val) => textPasswordChange(password_Val)}
-					onEndEditing={(e) => {
-						handleValidPassword(e.nativeEvent.text);
-						console.log('on edit');
-					}}
-				/>
-			</View>
-
-			{data.isValidPassword ? null : (
-				<Animatable.View animation="fadeInLeft" duration={500}>
-					<Text style={styles.errorText}>
-						Your password must be 8 or more characters long!
+					<Text style={styles.text_footer}>
+						Phone Number
+						{isPhone ? null : (
+							<Animatable.View animation='fadeInRight' duration={500}>
+								<Text style={styles.errorText}>
+									Please enter your phone number
+								</Text>
+							</Animatable.View>
+						)}
 					</Text>
+					<View style={styles.action}>
+						<FontAwesome name='phone' color='#05375a' size={20} />
+						<TextInput
+							placeholder='xxx xxx xxxx'
+							style={styles.textInput}
+							maxLength={12}
+							keyboardType='numeric'
+							onChangeText={text => handlePhone(text)}
+						/>
+					</View>
+
+					<Text style={styles.text_footer}>
+						Password
+						{isPassword ? null : (
+							<Animatable.View animation='fadeInRight' duration={500}>
+								<Text style={styles.errorText}>
+									Must be 6 characters or longer
+								</Text>
+							</Animatable.View>
+						)}
+					</Text>
+					<View style={styles.action}>
+						<Feather name='key' color='#05375a' size={20} />
+						<TextInput
+							placeholder='Enter Password'
+							secureTextEntry={hidePassword}
+							style={styles.textInput}
+							autoCapitalize='none'
+							onChangeText={text => handlePassword(text)}
+						/>
+
+						<TouchableOpacity
+							onPress={() =>
+								setHidePassword(prevHidePassword => !prevHidePassword)
+							}>
+							{hidePassword ? (
+								<Feather name='eye-off' color='salmon' size={20} />
+							) : (
+								<Feather name='eye' color='red' size={20} />
+							)}
+						</TouchableOpacity>
+					</View>
+
+					<View style={styles.button}>
+						<TouchableOpacity
+							onPress={() => {
+								if (validateInput()) {
+									try {
+										signUpNewUser();
+										Alert.alert(
+											'Registered!',
+											'You will receive a text message to confirm your account.'
+										);
+									} catch (error) {
+										switch (error.code) {
+											case 'auth/email-already-in-use':
+												Alert.alert(
+													`Email address ${email} is already in use`,
+													`Please use a different email address.`
+												);
+												break;
+											case 'auth/invalid-email':
+												Alert.alert(
+													`Email address ${email} is invalid.`,
+													`Please use a different email address.`
+												);
+												break;
+											case 'auth/operation-not-allowed':
+												Alert.alert(
+													`Error during sign up.`,
+													`Authorisation was not allowed.`
+												);
+												break;
+											case 'auth/weak-password':
+												Alert.alert(
+													`Password is too weak.`,
+													`Please use a stronger password. Try including symbols and capital letters.`
+												);
+												break;
+											default:
+												Alert.alert(
+													`Registration failed.`,
+													`Please try at another time.`
+												);
+												console.log(
+													error.message
+												);
+												break;
+										}
+									}
+								}
+							}}
+							style={[
+								styles.signIn,
+								{
+									bordercolor: '#009387',
+									borderWidth: 1,
+									backgroundColor: 'crimson',
+									marginTop: 20,
+								},
+							]}>
+							<Text style={[styles.textSign, {color: 'white'}]}>
+								Register
+							</Text>
+						</TouchableOpacity>
+					</View>
 				</Animatable.View>
-			)}
-
-			<View>
-				<Text>Confirm the Password:</Text>
-				<TextInput
-					placeholder="Confirm Password"
-					style={styles.textbox}
-					secureTextEntry={true}
-					onChangeText={(confirmPassword_Val) =>
-						textPasswordConfirmChange(confirmPassword_Val)
-					}
-					onEndEditing={(e) => handleValidConfirmPassword(e.nativeEvent.text)}
-				/>
-			</View>
-
-			{data.isValidConfirmPassword ? null : (
-				<Animatable.View animation="fadeInLeft" duration={500}>
-					<Text style={styles.errorText}>Your passwords do not match!</Text>
-				</Animatable.View>
-			)}
-
-			<View>
-				<Button title="Sign Up" onPress={console.log('You have signed up!', data.firstName)} />
 			</View>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
-	login: {
+	container: {
 		flex: 1,
+		backgroundColor: 'crimson',
+	},
+	header: {
+		flex: 1,
+		justifyContent: 'flex-end',
+		paddingHorizontal: 20,
+		paddingTop: 35,
+		paddingBottom: 35,
+	},
+	footer: {
+		flex: 13,
+		backgroundColor: 'white',
+		borderTopLeftRadius: 30,
+		borderTopRightRadius: 30,
+		paddingHorizontal: 20,
+		paddingVertical: 10,
+	},
+	text_header: {
+		color: '#fff',
+		fontWeight: 'bold',
+		fontSize: 30,
+		textAlign: 'center',
+	},
+	text_footer: {
+		color: '#05375a',
+		fontSize: 17,
+		fontWeight: 'bold',
+		marginTop: 5,
+		width: 100,
+	},
+	text_footer_first: {
+		color: '#05375a',
+		fontSize: 17,
+		fontWeight: 'bold',
+	},
+	action: {
+		flexDirection: 'row',
+		marginTop: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: '#f2f2f2',
+		paddingBottom: 5,
+	},
+	actionError: {
+		flexDirection: 'row',
+		marginTop: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: '#FF0000',
+		paddingBottom: 5,
+	},
+	textInput: {
+		flex: 1,
+		marginTop: Platform.OS === 'ios' ? 0 : -12,
+		paddingLeft: 10,
+		color: '#05375a',
+		textAlignVertical: 'bottom',
+	},
+	errorMsg: {
+		color: '#FF0000',
+		fontSize: 14,
+		textAlignVertical: 'bottom',
+	},
+	button: {
 		alignItems: 'center',
+		marginTop: 50,
+	},
+	signIn: {
+		width: '100%',
+		height: 50,
 		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 10,
 	},
-	textbox: {
-		borderColor: 'black',
-		borderWidth: 1,
-		padding: 8,
-		margin: 10,
-		width: 200,
+	spinnerTextStyle: {
+		color: 'crimson',
 	},
-	loginButton: {
-		padding: 8,
-		margin: 10,
+	textSign: {
+		fontSize: 18,
+		fontWeight: 'bold',
 	},
 	errorText: {
 		color: 'red',
-	},
-	regisButton: {
-		paddingTop: 40,
-		marginTop: 20,
-		margin: 40,
+		marginLeft: 5,
+		textAlign: 'right',
+		textAlignVertical: 'bottom',
 	},
 });

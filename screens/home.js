@@ -7,7 +7,7 @@ import {MaterialCommunityIcons} from '@expo/vector-icons';
 import LottieView from 'lottie-react-native';
 import SettingScreen from './setting';
 import EmergencyScreen from './emergency';
-import InboxScreen from './inbox';
+import InboxScreen from './chatStack';
 import MapScreen from './map';
 import ProfileScreen from './profile';
 
@@ -117,6 +117,7 @@ function MyTabs() {
 				name="Map"
 				component={MapScreen}
 				options={{
+					headerShown: false,
 					tabBarLabel: 'Map',
 					tabBarIcon: ({color, size, focused}) => (
 						// <MaterialCommunityIcons name="map" color={color} size={size} />
