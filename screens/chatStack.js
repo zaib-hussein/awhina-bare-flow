@@ -1,38 +1,43 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import InboxScreen from './inbox';
+import { IconButton } from 'react-native-paper';
 
-const ChatStack = createStackNavigator();
+// import third party libraries 
+import {createStackNavigator} from '@react-navigation/stack';
 
-const ModalStack = createStackNavigator();
+// import screens 
+import ChatListScreen from './inbox'
+import NewRoomScreen from './chatNewRoom'
+import ChatScreen from './chatRoom'
 
-function ChatApp() {
-  return (
-    <ChatStack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: '#6646ee'
-        },
-        headerTintColor: '#ffffff',
-        headerTitleStyle: {
-          fontSize: 22
-        }
-      }}
-    >
-      {/* Add this */}
-      <ChatStack.Screen 
-        name='Chat' 
-        component={InboxScreen} 
-      />
-    </ChatStack.Navigator>
-  );
-}
+const RootStack = createStackNavigator();
 
-export default function chatStack() {
-  return (
-    <ModalStack.Navigator mode='modal' headerMode='none'>
-      <ModalStack.Screen name='Chat' component={ChatApp} />
-      <ModalStack.Screen name='AddRoom' component={AddRoomScreen} />
-    </ModalStack.Navigator>
-  );
+export default class ChatStack extends React.Component {
+  render() {
+    return (
+      <RootStack.Navigator>
+        <RootStack.Screen
+          name='Inbox'
+          component={ChatListScreen}
+          options={({ navigation }) => ({
+            headerRight: () => (
+              <IconButton
+                icon='message-plus'
+                size={28}
+                color='#000000'
+                onPress={() => navigation.navigate('Add Room')}
+              />
+            )
+          })}
+        />
+        <RootStack.Screen 
+          name='Add Room' 
+          component={NewRoomScreen}
+        />
+        <RootStack.Screen
+          name='Chat'
+          component={ChatScreen}
+        />
+      </RootStack.Navigator>
+    );
+  }
 }
