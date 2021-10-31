@@ -12,6 +12,7 @@ import {
 	Dimensions,
 	Button,
 	ToastAndroid,
+	Alert,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import DateTimePicker from 'react-native-modal-datetime-picker';
@@ -324,55 +325,47 @@ export default function Register() {
 							)}
 						</TouchableOpacity>
 					</View>
-					<View>
-						{isPassword ? null : (
-							<Animatable.View animation='fadeInRight' duration={500}>
-								<Text style={styles.errorText}>
-									Must be 6 characters or longer
-								</Text>
-							</Animatable.View>
-						)}
-					</View>
+
 					<View style={styles.button}>
 						<TouchableOpacity
 							onPress={() => {
 								if (validateInput()) {
 									try {
 										signUpNewUser();
-										ToastAndroid.show(
+										Alert.alert(
 											'Registered!',
-											ToastAndroid.SHORT
+											'You will receive a text message to confirm your account.'
 										);
 									} catch (error) {
 										switch (error.code) {
 											case 'auth/email-already-in-use':
-												ToastAndroid.show(
-													`Email address ${email} already in use.`,
-													ToastAndroid.SHORT
+												Alert.alert(
+													`Email address ${email} is already in use`,
+													`Please use a different email address.`
 												);
 												break;
 											case 'auth/invalid-email':
-												ToastAndroid.show(
+												Alert.alert(
 													`Email address ${email} is invalid.`,
-													ToastAndroid.SHORT
+													`Please use a different email address.`
 												);
 												break;
 											case 'auth/operation-not-allowed':
-												ToastAndroid.show(
+												Alert.alert(
 													`Error during sign up.`,
-													ToastAndroid.SHORT
+													`Authorisation was not allowed.`
 												);
 												break;
 											case 'auth/weak-password':
-												ToastAndroid.show(
-													'Password is not strong enough. Add additional characters including special characters and numbers.',
-													ToastAndroid.SHORT
+												Alert.alert(
+													`Password is too weak.`,
+													`Please use a stronger password. Try including symbols and capital letters.`
 												);
 												break;
 											default:
-												ToastAndroid.show(
-													'Please try registration at another time',
-													ToastAndroid.SHORT
+												Alert.alert(
+													`Registration failed.`,
+													`Please try at another time.`
 												);
 												console.log(
 													error.message
@@ -433,6 +426,7 @@ const styles = StyleSheet.create({
 		fontSize: 17,
 		fontWeight: 'bold',
 		marginTop: 5,
+		width: 100,
 	},
 	text_footer_first: {
 		color: '#05375a',
@@ -486,6 +480,7 @@ const styles = StyleSheet.create({
 	errorText: {
 		color: 'red',
 		marginLeft: 5,
+		textAlign: 'right',
 		textAlignVertical: 'bottom',
 	},
 });
