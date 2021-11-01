@@ -12,27 +12,27 @@ const Tutorial = ({navigation}) => {
 
             pages={[
             {
-                backgroundColor: '#add8e6',
-                image: <Image source={require('./icons/awhina.png')} />,
-                title: 'Welcome to Awhina Emergency Services',
+                backgroundColor: 'white',
+                image: <Image source={require('./icons/awhinacare.png')} />,
+                title: 'Welcome to Awhina Community Services',
                 subtitle: 'continue to get a quick tutorial..',
             },
             {
                 backgroundColor: '#008080',
-                image: <Image source={require('./icons/awhina.png')} />,
+                image: <Image source={require('./icons/home.jpg')} />,
                 title: 'This will be the default screen where a user can select to give or receive help',
                 subtitle: 'Click on either Give or Receive options.',
             },
             {
                 backgroundColor: '#90ee90',
-                image: <Image source={require('./icons/awhina.png')} />,
-                title: 'GIVE HELP screen',
+                image: <Image source={require('./icons/give.jpg')} />,
+                title: 'GIVE screen',
                 subtitle: "select from options with what you would like to help with",
             },
             {
                 backgroundColor: '#cd5c5c',
-                image: <Image source={require('./icons/awhina.png')} />,
-                title: 'RECEIVE HELP screen',
+                image: <Image source={require('./icons/help.jpg')} />,
+                title: 'HELP screen',
                 subtitle: "click on options available on screen to send a request onto nearby users",
             },
             ]}

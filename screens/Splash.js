@@ -7,12 +7,12 @@ const Splash = ({navigation}) => {
     <View style={styles.container}>
       <View style={styles.lottieView}>
         <LottieView
-          source={require('./bottomIcons/setting.json')}
+          source={require('./bottomIcons/splash.json')}
           autoPlay={true}
           loop={false}
           onAnimationFinish={() => navigation.navigate('Login')}
         ></LottieView>
-        
+
       </View>
     </View>
   );
